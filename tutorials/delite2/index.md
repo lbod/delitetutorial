@@ -1,6 +1,10 @@
 # Delite second tutorial
 
 
-## background
+## background summary
 this is a more advanced tutorial
 
+## topics
+
+- alternative templating frameworks?
+- using jquery?
