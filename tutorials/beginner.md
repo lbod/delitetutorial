@@ -112,9 +112,12 @@ to the following:
         anotherCustomElement.placeAt(document.body, 'last');
     }
 
-Which would render: (default image width 354x178)
+Which would render: (default image width 460x242)
 
-<img src="./images/programmatic_custom_element.gif" style="border:1px solid black;"/>
+
+<img src='./images/programmatic_custom_element.gif'/>
+
+
 
 
 **TODO: then go on to explain what prototyping `"delite/Widget"` does i.e. lifecycle methods**
