@@ -65,6 +65,8 @@ This is the most basic setup for a custom component, you can view the sample gen
 in a browser to see what's been created.
 We'll build upon this example HTML as we progress in the tutorial.
 
+    blurb about using dcl here? i.e. using requirejs we include dcl and delite/register which allows us to create a class
+    via a module. It needs to be explained briefly but hint that you could do it inline in the page, not using a module.
 
 Expand upon these resources & then add templating, then theming, internationalisation and pointer management
 
