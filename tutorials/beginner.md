@@ -6,7 +6,7 @@ This isn't a replacement per se but a repository to be used as the core building
 in HTML, CSS & JavaScript to build reusable Web Components.
 
 It can be used on it's own but more likely used with other projects either from the [ibm-js repositories](https://github.com/ibm-js)
-or others repositories.
+or other repositories.
 
 More information can be found on the [delite website](http://ibm-js.github.io/delite/) explaining the standards this library aims to conform to.
 
@@ -61,7 +61,8 @@ We've created a new package named `first-delite-package` for new custom elements
 - `./MyFirstElement/css/MyFirstElement.css` - this is our custom element css
 - `./samples/MyFirstElement.html` - this is a sample how to use our new custom element
 
-This is the most basic setup for a custom component, you can view the sample generated HTML in a browser to see what's been created.
+This is the most basic setup for a custom component, you can view the sample generated HTML `./samples/MyFirstElement.html`
+in a browser to see what's been created.
 We'll build upon this example HTML as we progress in the tutorial.
 
 
@@ -69,15 +70,16 @@ Expand upon these resources & then add templating, then theming, internationalis
 
 ---
 
-## Custom element
-Viewing the `./samples/MyFirstElement.html` example HTML we can see we've created the custom element in markup via
+## Creating a custom element
+Viewing the `./samples/MyFirstElement.html` example HTML we can see we've (partly) created the custom element declaratively in markup via
 
     <my-first-element id="element" value="The Title"></my-first-element>
 
 ###Registering
 
 `<my-first-element/>` doesn't constitute a custom element on it's own, it first needs to go through a registration process which is achieved using
-the `delite/register` module. This is analogous to the HTML specification for registering elements i.e. `document.registerElement('my-first-element');`
+the `delite/register` module. This is analogous to the HTML specification for registering cutsom elements
+i.e. `document.registerElement('my-first-element');`
 
 If we look at the custom element class `./MyFirstElement.js` we see we register the custom element tag via:
 
@@ -85,7 +87,7 @@ If we look at the custom element class `./MyFirstElement.js` we see we register 
 This is an important concept which sometimes isn't clear at a first glance. You can add any non-standard tag to an HTML page and the HTML parser
 will not complain, this is because these elements will be defined as an
 [`HTMLUnknownElement`](http://www.whatwg.org/specs/web-apps/current-work/multipage/dom.html#htmlunknownelement).
-To create a custom element it must be `upgraded` first, this is what `delite/register` does. `delite/register` supports browsers who natively
+To create a custom element it must be **upgraded** first, this is what `delite/register` does. `delite/register` supports browsers who natively
 support `document.registerElement` and those who don't.
 
 The registration process above using `delite/register`, creates a custom element by registering the tag name `my-first-element` as the first
