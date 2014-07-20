@@ -95,6 +95,27 @@ Elements which inherit from `HTMLElement`
 using [valid custom element names](http://www.w3.org/TR/2013/WD-custom-elements-20130514/#dfn-custom-element-name) are custom elements.
 The most basic requirement for the tag name is it **MUST** contain a dash **(-)**.
 
+###Programatic creation
+The generated example in `./samples/MyFirstElement.html` shows the declarative creation of custom elements, you can do the same thing
+with programmatic creation
+
+edit `./samples/MyFirstElement.html` i.e.
+
+    require(["delite/register", "first-delite-package/MyFirstElement"], function (register) {
+    	register.parse();
+    });
+to the following:
+
+    require(["delite/register", "first-delite-package/MyFirstElement"], function (register, MyFirstElement) {
+        register.parse();
+        var anotherCustomElement = new MyFirstElement({value : 'another custom element title'});
+        anotherCustomElement.placeAt(document.body, 'last');
+    }
+
+Which would render:
+
+![Programmatic custom element added](./images/programmatic_custom_element.png)
+
 **TODO: then go on to explain what prototyping `"delite/Widget"` does i.e. lifecycle methods**
 
 ## Lifecycle
