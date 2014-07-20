@@ -23,7 +23,7 @@ These steps are already explained but **TODO** we'll repeat that documentation u
 
 ---
 
-TODO: setup to be reviewed
+**TODO: setup to be reviewed**
 
 ### create the scaffold
 
@@ -76,7 +76,7 @@ Viewing the `./samples/MyFirstElement.html` example HTML we can see we've create
 
 ###Registering
 
-This doesn't constitute a custom element on it's own, it first needs to go through a registration process which is achieved using
+`<my-first-element/>` doesn't constitute a custom element on it's own, it first needs to go through a registration process which is achieved using
 the `delite/register` module. This is analogous to the HTML specification for registering elements i.e. `document.registerElement('my-first-element');`
 
 If we look at the custom element class `./MyFirstElement.js` we see we register the custom element tag via:
@@ -88,11 +88,14 @@ will not complain, this is because these elements will be defined as an
 To create a custom element it must be `upgraded` first, this is what `delite/register` does. `delite/register` supports browsers who natively
 support `document.registerElement` and those who don't.
 
-The registration process above, creates a custom element by inheriting from the `HTMLElement` (as well as inheriting from `"delite/Widget"`
-and `"decor/Invalidating"`). Elements which inherit from `HTMLElement`
+The registration process above using `delite/register`, creates a custom element by registering the tag name `my-first-element` as the first
+argument and then inheriting (prototyping) the `HTMLElement` (as well as `"delite/Widget"` and `"decor/Invalidating"`).
+
+Elements which inherit from `HTMLElement`
 using [valid custom element names](http://www.w3.org/TR/2013/WD-custom-elements-20130514/#dfn-custom-element-name) are custom elements.
 The most basic requirement for the tag name is it **MUST** contain a dash **(-)**.
 
+**TODO: then go on to explain what prototyping `"delite/Widget"` does i.e. lifecycle methods**
 
 ## Lifecycle
 Explain the main lifecycle methods
