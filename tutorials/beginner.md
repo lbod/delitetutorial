@@ -34,7 +34,7 @@ Install the `generator-delite-element` globally
 
     npm install -g generator-delite-element
 
-And create a new directory (named my-element) and change directory to it
+And create a new directory (named first-delite-package, which will also be our package name) and change directory to it using the command :
 
     mkdir -p first-delite-package  && cd $_
 
@@ -80,20 +80,20 @@ Viewing the `./samples/MyFirstElement.html` example HTML we can see we've (partl
 ###Registering
 
 `<my-first-element/>` doesn't constitute a custom element on it's own, it first needs to go through a registration process which is achieved using
-the `delite/register` module. This is analogous to the HTML specification for registering cutsom elements
+the `delite/register` module. This is analogous to the HTML specification for registering custom elements
 i.e. `document.registerElement('my-first-element');`
 
-If we look at the custom element class `./MyFirstElement.js` we see we register the custom element tag via:
+If we look at the custom element module `./MyFirstElement.js` we see we register the custom element tag via:
 
     return register("my-first-element", [HTMLElement, Widget, Invalidating], { .....
 This is an important concept which sometimes isn't clear at a first glance. You can add any non-standard tag to an HTML page and the HTML parser
-will not complain, this is because these elements will be defined as an
+will not complain, this is because these elements will be defined as a native
 [`HTMLUnknownElement`](http://www.whatwg.org/specs/web-apps/current-work/multipage/dom.html#htmlunknownelement).
 To create a custom element it must be **upgraded** first, this is what `delite/register` does. `delite/register` supports browsers who natively
 support `document.registerElement` and those who don't.
 
-The registration process above using `delite/register`, creates a custom element by registering the tag name `my-first-element` as the first
-argument and then inheriting (prototyping) the `HTMLElement` (as well as `"delite/Widget"` and `"decor/Invalidating"`).
+The registration process above using `delite/register`, creates a custom element by registering the tag name `"my-first-element"` as the first
+argument and then inheriting (prototyping) the `HTMLElement` native element (as well as `"delite/Widget"` and `"decor/Invalidating"`modules).
 
 Elements which inherit from `HTMLElement`
 using [valid custom element names](http://www.w3.org/TR/2013/WD-custom-elements-20130514/#dfn-custom-element-name) are custom elements.
