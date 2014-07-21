@@ -157,6 +157,30 @@ It's primary concern is to observe changes to properties defined on the widget a
 you place a breakpoint in that method and then click the "click to change title" button, you'll see this method is called
 (because the button adds inline JavaScript to update the element's value property).
 
+If we wanted to see what the old value was (and also print it out to the DOM) we can change this method to the following:
+
+    refreshRendering: function (props) {
+        // if the value change update the display
+        if ("value" in props) {
+            this._h.innerHTML = "old value = '" + props["value"] + "', and new value is '" + this.value + "'";
+        }
+    }
+
+Notice when you first load the page, this method will be called for each widget, this is because we're setting the `value` property on the
+declarative widget to `value="The Title"` and setting the value property on the programmatic widget to `value : "another custom element title"`.
+
+**TODO** : (review this, maybe not needed but it is weird behaviour, maybe some direction here to set an initial default value?)
+If you updated the value `property` of `./MyFirstElement.js` to:
+
+    value: "The Title",
+
+You'd notice that the `if ("value" in props) {` condition isn't true for the declarative custom element we added. This is because the property
+value hasn't changed.
+
+Lets undo this, change back to
+
+    value: "The Title",
+**END TODO**
 
 ## Lifecycle methods for our simple widget (expand on later when using template)
 Explain the main lifecycle methods
