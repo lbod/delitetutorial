@@ -77,6 +77,9 @@ Viewing the `./samples/MyFirstElement.html` example HTML we can see we've (partl
 
     <my-first-element id="element" value="The Title"></my-first-element>
 
+For those who used the Dojo Toolkit Dijit framework previously, an important conceptual difference in delite is that the widget is the DOM node.
+Dijit widgets instead, had a property which referenced the DOM node.
+
 ###Registering
 
 `<my-first-element/>` doesn't constitute a custom element on it's own, it first needs to go through a registration process which is achieved using
@@ -86,6 +89,9 @@ i.e. `document.registerElement('my-first-element');`
 If we look at the custom element module `./MyFirstElement.js` we see we register the custom element tag via:
 
     return register("my-first-element", [HTMLElement, Widget, Invalidating], { .....
+(Note that here, we're not explicitly requiring the module for the custom element i.e. `"first-delite-package/MyFirstElement"`,
+`delite/register` takes care of this for us for declarative created widgets).
+
 This is an important concept which sometimes isn't clear at a first glance. You can add any non-standard tag to an HTML page and the HTML parser
 will not complain, this is because these elements will be defined as a native
 [`HTMLUnknownElement`](http://www.whatwg.org/specs/web-apps/current-work/multipage/dom.html#htmlunknownelement).
@@ -105,7 +111,7 @@ with programmatic creation
 
 edit `./samples/MyFirstElement.html` i.e.
 
-    require(["delite/register", "first-delite-package/MyFirstElement"], function (register) {
+    require("delite/register", function (register) {
     	register.parse();
     });
 to the following:
@@ -113,20 +119,46 @@ to the following:
     require(["delite/register", "first-delite-package/MyFirstElement"], function (register, MyFirstElement) {
         register.parse();
         var anotherCustomElement = new MyFirstElement({value : 'another custom element title'});
+        // note you must call startup() for programmatically created widgets
+        anotherCustomElement.startup();
         anotherCustomElement.placeAt(document.body, 'last');
-    }
+    });
 
-Which would render: (default image width 460x242)
+Note that programmatically created widgets should always call `startup()`. A helper function is provided for `delite/Widget` to place it
+somewhere in the DOM named `placeAt`
+(see the [documentation](https://github.com/ibm-js/delite/blob/master/docs/Widget.md#placement) for it's usage).
+We need to also require the module for the custom element i.e. `"first-delite-package/MyFirstElement"` because we need to create a new
+instance and then call it's methods.
+
+
+The above would render: (default image width 460x242)
 
 
 <img src='./images/programmatic_custom_element.gif'/>
 
 
-
-
 **TODO: then go on to explain what prototyping `"delite/Widget"` does i.e. lifecycle methods**
 
-## Lifecycle
+###A look at the widget lifecycle methods for our simple widget
+If we look at `"first-delite-package/MyFirstElement"` we can see two methods have been created for us, `buildRendering` and `refreshRendering`.
+`buildRendering` is the most simplest of [lifecycle](https://github.com/ibm-js/delite/blob/master/docs/Widget.md#lifecycle)
+methods we need to create our widget.
+
+#### `buildRendering`
+We normally wouldn't need to create a `buildRendering` method, typically we'd use templates to create our widget UI (which will be explained
+later on) but because we aren't currently using a template we need to implement `buildRendering` to construct the widget UI for us. <br>
+In our sample `buildRendering` method we're adding `<span>title</span>` and `<h1></h1>` elements to our widget (as well as assigning a property
+to the widget named `_h1` i.e. via `this.appendChild(this._h = this.ownerDocument.createElement("h1"));`.
+
+
+#### `refreshRendering`
+`refreshRendering` is also a lifecycle method but implemented in `decor/Invalidating` which `delite/Widget` inherits from.
+It's primary concern is to observe changes to properties defined on the widget and update the UI. In your web browser developer tools, if
+you place a breakpoint in that method and then click the "click to change title" button, you'll see this method is called
+(because the button adds inline JavaScript to update the element's value property).
+
+
+## Lifecycle methods for our simple widget (expand on later when using template)
 Explain the main lifecycle methods
 
 	this.preCreate();
