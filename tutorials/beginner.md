@@ -14,12 +14,12 @@ More information can be found on the [delite website](http://ibm-js.github.io/de
 **TODO maybe this could be multi-step, not sure how much should be in this tut yet**
 
 In this tutorial you'll learn how to create your own custom elements, learn how to register them, learn how to use templates
-& learn how you can bind data.
+& learn how you can bind data. It's a beginner tutorial so we won't be delving too deep into what delite provides (yet!!!)
 
 ## Getting started
 To quickly get started, we're using [https://github.com/ibm-js/generator-delite-element](https://github.com/ibm-js/generator-delite-element)
-to install the required dependencies and create a basic **TODO** scaffold.
-These steps are already explained but **TODO** we'll repeat that documentation using Yeoman to get started.
+to install the required dependencies and create a basic scaffold.
+These steps are already explained but we'll repeat that documentation using Yeoman to get started.
 
 ---
 
@@ -105,7 +105,15 @@ Elements which inherit from `HTMLElement`
 using [valid custom element names](http://www.w3.org/TR/2013/WD-custom-elements-20130514/#dfn-custom-element-name) are custom elements.
 The most basic requirement for the tag name is it **MUST** contain a dash **(-)**.
 
-###Programatic creation
+###Declarative creation of custom elements
+If we view `./samples/MyFirstElement.html`, we see the following code:
+
+    require("delite/register", function (register) {
+    	register.parse();
+    });
+Declarative widgets (those created via markup in the page) need to be parsed in order to kick off the lifecycle of creating the widget.
+
+###Programatic creation of custom elements
 The generated example in `./samples/MyFirstElement.html` shows the declarative creation of custom elements, you can do the same thing
 with programmatic creation
 
@@ -162,14 +170,19 @@ If we wanted to see what the old value was (and also print it out to the DOM) we
     refreshRendering: function (props) {
         // if the value change update the display
         if ("value" in props) {
-            this._h.innerHTML = "old value = '" + props["value"] + "', and new value is '" + this.value + "'";
+            this._h.innerText = "old= '" + props["value"] + "', new='" + this.value + "'";
         }
     }
 
 Notice when you first load the page, this method will be called for each widget, this is because we're setting the `value` property on the
 declarative widget to `value="The Title"` and setting the value property on the programmatic widget to `value : "another custom element title"`.
 
-**TODO** : (review this, maybe not needed but it is weird behaviour, maybe some direction here to set an initial default value?)
+Click the 'click to change title button' which will render like:
+
+<img src='./images/custom_element_old_new_props.gif'/>
+
+**TODO** : (review this, maybe not needed but it is weird behaviour, maybe some direction here to set an initial default value? e.g. angular
+has the ngBindTemplate directive)
 If you updated the value `property` of `./MyFirstElement.js` to:
 
     value: "The Title",
@@ -177,17 +190,52 @@ If you updated the value `property` of `./MyFirstElement.js` to:
 You'd notice that the `if ("value" in props) {` condition isn't true for the declarative custom element we added. This is because the property
 value hasn't changed.
 
-Lets undo this, change back to
+Lets undo this, change it back to
 
-    value: "The Title",
+    value: "",
 **END TODO**
 
-## Lifecycle methods for our simple widget (expand on later when using template)
+###CSS
+If we look at the `./MyFirstElement.js` custom element module, we see there's a property defined named `baseClass` i.e. `baseClass: "my-first-element"`.
+This adds a class name to the root node of our custom element (which you can see in the DOM using your debugger tools). Also notice we include
+in the `define` the `delite/css!` plugin i.e. `"delite/css!./MyFirstElement/css/MyFirstElement.css"`. This plugin is obviously used to load CSS
+for our custom element, it can also take a list of CSS files to load so lets see this in action.
+
+Change the `define` of our custom element to the following:
+
+    define([
+        "delite/register",
+        "delite/Widget",
+        "decor/Invalidating",
+        "delite/css!./MyFirstElement/css/MyFirstElement.css,./MyFirstElement/css/MyFirstElementSpan.css"
+
+Then create this new CSS file at `./MyFirstElement/css/MyFirstElementSpan.css` with
+
+    .my-first-element span {
+        color: blue;
+    }
+Reload the page and you'll see the new CSS file being loaded in your development tools and the new style being applied.
+
+Obviously this is an unrealistic example but shows how the `delite/css!` plugin can be used. Later on, we'll show how to use the theming capabilities.
+
+
+## Lifecycle methods for our simple widget (expand on later when using template or do this here?)
 Explain the main lifecycle methods
 
 	this.preCreate();
 	this.buildRendering();
 	this.postCreate();
+
+##Templates
+What we've done so far is obviously a very rudimentary demonstration. We wouldn't expect to programmatically create DOM nodes & this is where
+delite comes into it's own. Out of the box, delite supports templates using an in built implementation of [Handlebars](http://handlebarsjs.com/).
+We won't need to programmatically create DOM nodes in `buildRendering`, creating a template will do all the work for us.
+
+(Note there are some limitations using the `delite/handlebars!` plugin in delite, namely it doesn't support iterators or TODO: conditionals,
+however in most cases this isn't a limiting factor. Support for this will be explained in a later more advanced tutorial when we discuss
+[Liaison](https://github.com/ibm-js/liaison)).
+
+
 
 ## topics
 custom element
