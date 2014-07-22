@@ -82,7 +82,7 @@ Dijit widgets instead, had a property which referenced the DOM node.
 
 ###Registering
 
-`<my-first-element/>` doesn't constitute a custom element on it's own, it first needs to go through a registration process which is achieved using
+The `<my-first-element>` element doesn't constitute a custom element on it's own, it first needs to go through a registration process which is achieved using
 the `delite/register` module. This is analogous to the HTML specification for registering custom elements
 i.e. `document.registerElement('my-first-element');`
 
@@ -128,8 +128,8 @@ to the following:
         register.parse();
         var anotherCustomElement = new MyFirstElement({value : 'another custom element title'});
         // note you must call startup() for programmatically created widgets
-        anotherCustomElement.startup();
         anotherCustomElement.placeAt(document.body, 'last');
+        anotherCustomElement.startup();
     });
 
 Note that programmatically created widgets should always call `startup()`. A helper function is provided for `delite/Widget` to place it
@@ -196,6 +196,8 @@ Lets undo this, change it back to
 **END TODO**
 
 ###CSS
+TODO: note this no longer works as per recent updates
+
 If we look at the `./MyFirstElement.js` custom element module, we see there's a property defined named `baseClass` i.e. `baseClass: "my-first-element"`.
 This adds a class name to the root node of our custom element (which you can see in the DOM using your debugger tools). Also notice we include
 in the `define` the `delite/css!` plugin i.e. `"delite/css!./MyFirstElement/css/MyFirstElement.css"`. This plugin is obviously used to load CSS
