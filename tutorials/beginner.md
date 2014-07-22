@@ -55,13 +55,13 @@ You'll be prompted to enter the widget package name & the name of the custom wid
 ### A look through what's been generated
 Lets look through what Yeoman created, again this is just a boilerplate setup but here's the important components.
 
-We've created a new package named `first-delite-package` for new custom elements that we'll create.
+We've created a new package named `first-delite-package` for new widgets that we'll create.
 
-- `./MyFirstElement.js` - this is our custom element class
-- `./MyFirstElement/css/MyFirstElement.css` - this is our custom element css
-- `./samples/MyFirstElement.html` - this is a sample how to use our new custom element
+- `./MyFirstElement.js` - this is our widget module
+- `./MyFirstElement/css/MyFirstElement.css` - this is our widget css
+- `./samples/MyFirstElement.html` - this is a sample how to use our new widget
 
-This is the most basic setup for a custom component, you can view the sample generated HTML `./samples/MyFirstElement.html`
+This is the most basic setup for a widget/custom component, you can view the sample generated HTML `./samples/MyFirstElement.html`
 in a browser to see what's been created.
 We'll build upon this example HTML as we progress in the tutorial.
 
@@ -233,7 +233,78 @@ We won't need to programmatically create DOM nodes in `buildRendering`, creating
 
 (Note there are some limitations using the `delite/handlebars!` plugin in delite, namely it doesn't support iterators or TODO: conditionals,
 however in most cases this isn't a limiting factor. Support for this will be explained in a later more advanced tutorial when we discuss
-[Liaison](https://github.com/ibm-js/liaison)).
+[Liaison](https://github.com/ibm-js/liaison). The handlebars implementation delite implements is primarily focused on performance).
+
+We'll create a new delite custom element using Yeoman again.
+
+In our `first-delite-package` folder run the `generator-delite-element` Yeoman generator with the following options (overwrite any files when
+promoted):
+
+    yo delite-element
+
+    [?] What is the name of your delite widget element package? first-delite-package
+    [?] What do you want to call your delite widget element (must contain a dash)? my-first-templated-element
+    [?] Would you like your delite element to be built on a template? Yes
+    [?] Would you like your delite element to providing theming capabilities? No
+    [?] Will your delite element require string internationalization? No
+    [?] Will your delite element require pointer management? No
+       create MyFirstTemplatedElement/MyFirstTemplatedElement.html
+       create MyFirstTemplatedElement.js
+    identical package.json
+     conflict bower.json
+    [?] Overwrite bower.json? overwrite
+        force bower.json
+     conflict README.md
+    [?] Overwrite README.md? overwrite
+        force README.md
+       create MyFirstTemplatedElement/css/MyFirstTemplatedElement.css
+       create tests/MyFirstTemplatedElement.js
+     conflict tests/intern.js
+    [?] Overwrite tests/intern.js? overwrite
+        force tests/intern.js
+    identical tests/intern.local.js
+    identical tests/intern.browser.js
+    identical Gruntfile.js
+       create samples/MyFirstTemplatedElement.html
+    identical .jshintrc
+
+This, as shown in the console output, creates:
+
+- `./MyFirstTemplatedElement.js` - this is our widget module
+- `./MyFirstTemplatedElement/css/MyFirstTemplatedElement.css` - this is our widget css
+- `./MyFirstTemplatedElement/MyFirstTemplatedElement.html` - this is our widget template
+- `./samples/MyFirstTemplatedElement.html` - this is a sample how to use our new widget
+
+###Handlebars
+If we look at the template we just created `./MyFirstTemplatedElement/MyFirstTemplatedElement.html` we can see it's created the following:
+
+    <template>
+        title:
+        <h1>{{value}}</h1>
+    </template>
+
+All templates must be enclosed in a `<template>` element, we can see all the work we did in the `buildRendering` lifecycle method becomes much
+more simple because now we're just dealing with HTML.
+
+We don't need to implement the code in `buildRendering` of the non-templated example e.g. See our `./MyFirstTemplatedElement.js` widget module
+
+    define([
+        "delite/register",
+        "delite/Widget",
+        "delite/handlebars!./MyFirstTemplatedElement/MyFirstTemplatedElement.html",
+        "delite/css!./MyFirstTemplatedElement/css/MyFirstTemplatedElement.css"
+    ], function (register, Widget, template) {
+        return register("my-first-templated-element", [HTMLElement, Widget], {
+            baseClass: "my-first-templated-element",
+
+            value: "",
+            template: template
+        });
+    });
+
+All we need to do now is include the template using the handlebars plugin i.e.
+`"delite/handlebars!./MyFirstTemplatedElement/MyFirstTemplatedElement.html"` and instead assign the resolved template to the `template` property
+ of our widget i.e. `template: template`.
 
 
 
