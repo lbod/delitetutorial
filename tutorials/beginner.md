@@ -308,6 +308,74 @@ All we need to do now is include the template using the handlebars plugin i.e.
 `"delite/handlebars!./MyFirstTemplatedElement/MyFirstTemplatedElement.html"` and instead assign the resolved template to the `template` property
  of our widget i.e. `template: template`.
 
+####Using handlebars templates
+* im changing the title to an h2 (change css too), wrap in an `<article>` tag and add an object with properties (ive asked bill a question
+about innerHTML of declarative elements and how to bind to widget/template properties)
+
+
+What we've done so far isn't very exciting, so lets try and do something more 'real life'. Imagine we need to implement blogging widgets.
+The widget needs to show the blog title (which we've already done with `{{value}}`, a date it was published, the author and the content of the
+blog.
+
+Let's make some changes:
+#####Template
+Change our template to add new properties for a blog author, when the blog was published and the text of the blog
+in `./MyFirstTemplatedElement/MyFirstTemplatedElement.html`:
+
+    <template>
+        <article>
+            <h3>{{value}}</h3>
+            <p class='blogdetails'>Published at <span>{{articleDetails.publishDate}}</span> by <span>{{articleDetails.author}}</span></p>
+            <p class='blog'>{{articleText}}</p>
+        </article>
+    </template>
+
+`{{articleDetails.publishDate}}` and `{{articleDetails.author}}` are _path_ bindings to widget properties i.e. an object `articleDetails`
+which has properties `publishDate` and `author`.
+
+
+#####Template CSS
+We've changed HTML in the template, adding new properties and classes, so change `./MyFirstTemplatedElement/css/MyFirstTemplatedElement.css` to:
+
+    .my-first-templated-element {
+        display: block;
+    }
+
+    .my-first-templated-element h3 {
+        color: red;
+    }
+
+    .my-first-templated-element p.blogdetails span {
+        font-weight: bold;
+    }
+
+    .my-first-templated-element p.blog {
+        padding-left: 20px;
+    }
+
+
+#####Widget
+`./MyFirstTemplatedElement.js` :
+
+    define([
+        "delite/register",
+        "delite/Widget",
+        "delite/handlebars!./MyFirstTemplatedElement/MyFirstTemplatedElement.html",
+        "delite/css!./MyFirstTemplatedElement/css/MyFirstTemplatedElement.css"
+    ], function (register, Widget, template) {
+        return register("my-first-templated-element", [HTMLElement, Widget], {
+            baseClass: "my-first-templated-element",
+
+            value: "",
+            template: template,
+            articleDetails: {publishDate: 'foo', author: 'blah'},
+            articleText : 'default article text'
+        });
+    });
+
+We've added an object property to our widget named `articleDetails` (which has `publishDate` and `author` properties) and a property named
+`articleText`.
+
 
 
 ## topics
