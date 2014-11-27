@@ -23,7 +23,7 @@ These steps are already explained but we'll repeat that documentation using Yeom
 
 ---
 
-**TODO: setup to be reviewed**
+**TODO: setup to be reviewed - this is WS project custom **
 
 ### create the scaffold
 
@@ -36,7 +36,8 @@ Install the `generator-delite-element` globally
 
 And create a new directory (named first-delite-package, which will also be our package name) and change directory to it using the command :
 
-    mkdir -p first-delite-package  && cd $_
+    mkdir -p custom
+    cd custom
 
 Run Yeoman to create our scaffold
 
@@ -45,23 +46,24 @@ Run Yeoman to create our scaffold
 You'll be prompted to enter the widget package name & the name of the custom widget element, accept the defaults for delite widget element package
 & delite widget element name, select no for the rest of the options.
 
-    [?] What is the name of your delite widget element package? first-delite-package
-    [?] What do you want to call your delite widget element (must contain a dash)? my-first-element
-    [?] Would you like your delite element to be built on a template? N
-    [?] Would you like your delite element to providing theming capabilities? N
-    [?] Will your delite element require string internationalization? N
-    [?] Will your delite element require pointer management? N
+    ? What is the name of your delite widget element package? (custom)
+    ? What do you want to call your delite widget element (must contain a dash)? (custom-element)
+    ? Would you like your delite element to be built on a template? n
+    ? Would you like your delite element to providing theming capabilities? n
+    ? Will your delite element require string internationalization? n
+    ? Will your delite element require pointer management? n
+    ? Do you want to use build version of delite package (instead of source version)? n
 
 ### A look through what's been generated
 Lets look through what Yeoman created, again this is just a boilerplate setup but here's the important components.
 
-We've created a new package named `first-delite-package` for new widgets that we'll create.
+We've created a new package named `custom` for new widgets that we'll create.
 
-- `./MyFirstElement.js` - this is our widget module
-- `./MyFirstElement/css/MyFirstElement.css` - this is our widget css
-- `./samples/MyFirstElement.html` - this is a sample how to use our new widget
+- `./CustomElement.js` - this is our widget module
+- `./CustomElement/css/CustomElement.css` - this is our widget css
+- `./samples/CustomElement.html` - this is a sample how to use our new widget
 
-This is the most basic setup for a widget/custom component, you can view the sample generated HTML `./samples/MyFirstElement.html`
+This is the most basic setup for a widget/custom component, you can view the sample generated HTML `./samples/CustomElement.html`
 in a browser to see what's been created.
 We'll build upon this example HTML as we progress in the tutorial.
 
@@ -73,23 +75,24 @@ Expand upon these resources & then add templating, then theming, internationalis
 ---
 
 ## Creating a custom element
-Viewing the `./samples/MyFirstElement.html` example HTML we can see we've (partly) created the custom element declaratively in markup via
+Viewing the `./samples/CustomElement.html` example HTML we can see we've (partly) created the custom element declaratively in markup via
 
-    <my-first-element id="element" value="The Title"></my-first-element>
+    <custom-element id="element" value="The Title"></custom-element>
 
 For those who used the Dojo Toolkit Dijit framework previously, an important conceptual difference in delite is that the widget is the DOM node.
 Dijit widgets instead, had a property which referenced the DOM node.
 
 ###Registering
 
-The `<my-first-element>` element doesn't constitute a custom element on it's own, it first needs to go through a registration process which is achieved using
+The `<custom-element>` element doesn't constitute a custom element on it's own, it first needs to go through a registration process which is achieved using
 the `delite/register` module. This is analogous to the HTML specification for registering custom elements
-i.e. `document.registerElement('my-first-element');`
+i.e. `document.registerElement('custom-element');`
 
-If we look at the custom element module `./MyFirstElement.js` we see we register the custom element tag via:
+If we look at the custom element module `./CustomElement.js` we see we register the custom element tag via:
 
-    return register("my-first-element", [HTMLElement, Widget, Invalidating], { .....
-(Note that here, we're not explicitly requiring the module for the custom element i.e. `"first-delite-package/MyFirstElement"`,
+    return register("custom-element", [HTMLElement, Widget], { .....
+TODO: NOTE SURE WHAT THIS MEANS, THIS WAS FOR AN OLDER VERSION OF THE PARSER??:
+(Note that here, we're not explicitly requiring the module for the custom element i.e. `"custom/CustomElement"`,
 `delite/register` takes care of this for us for declarative created widgets).
 
 This is an important concept which sometimes isn't clear at a first glance. You can add any non-standard tag to an HTML page and the HTML parser
@@ -98,35 +101,35 @@ will not complain, this is because these elements will be defined as a native
 To create a custom element it must be **upgraded** first, this is what `delite/register` does. `delite/register` supports browsers who natively
 support `document.registerElement` and those who don't.
 
-The registration process above using `delite/register`, creates a custom element by registering the tag name `"my-first-element"` as the first
-argument and then inheriting (prototyping) the `HTMLElement` native element (as well as `"delite/Widget"` and `"decor/Invalidating"`modules).
+The registration process above using `delite/register`, creates a custom element by registering the tag name `"custom-element"` as the first
+argument and then inheriting (prototyping) the `HTMLElement` native element (as well as the `"delite/Widget"` module).
 
 Elements which inherit from `HTMLElement`
 using [valid custom element names](http://www.w3.org/TR/2013/WD-custom-elements-20130514/#dfn-custom-element-name) are custom elements.
 The most basic requirement for the tag name is it **MUST** contain a dash **(-)**.
 
 ###Declarative creation of custom elements
-If we view `./samples/MyFirstElement.html`, we see the following code:
+If we view `./samples/CustomElement.html`, we see the following code:
 
-    require("delite/register", function (register) {
+    require(["delite/register", "custom/CustomElement"], function (register) {
     	register.parse();
     });
 Declarative widgets (those created via markup in the page) need to be parsed in order to kick off the lifecycle of creating the widget.
 
 ###Programatic creation of custom elements
-The generated example in `./samples/MyFirstElement.html` shows the declarative creation of custom elements, you can do the same thing
+The generated example in `./samples/CustomElement.html` shows the declarative creation of custom elements, you can do the same thing
 with programmatic creation
 
-edit `./samples/MyFirstElement.html` i.e.
+edit `./samples/CustomElement.html` i.e.
 
-    require("delite/register", function (register) {
+    require(["delite/register", "custom/CustomElement"], function (register) {
     	register.parse();
     });
 to the following:
 
-    require(["delite/register", "first-delite-package/MyFirstElement"], function (register, MyFirstElement) {
+    require(["delite/register", "custom/CustomElement"], function (register, CustomElement) {
         register.parse();
-        var anotherCustomElement = new MyFirstElement({value : 'another custom element title'});
+        var anotherCustomElement = new CustomElement({value : 'another custom element title'});
         // note you must call startup() for programmatically created widgets
         anotherCustomElement.placeAt(document.body, 'last');
         anotherCustomElement.startup();
@@ -135,7 +138,7 @@ to the following:
 Note that programmatically created widgets should always call `startup()`. A helper function is provided for `delite/Widget` to place it
 somewhere in the DOM named `placeAt`
 (see the [documentation](https://github.com/ibm-js/delite/blob/master/docs/Widget.md#placement) for it's usage).
-We need to also require the module for the custom element i.e. `"first-delite-package/MyFirstElement"` because we need to create a new
+We need to also require the module for the custom element i.e. `"custom/CustomElement"` because we need to create a new
 instance and then call it's methods.
 
 
@@ -148,15 +151,16 @@ The above would render: (default image width 460x242)
 **TODO: then go on to explain what prototyping `"delite/Widget"` does i.e. lifecycle methods**
 
 ###A look at the widget lifecycle methods for our simple widget
-If we look at `"first-delite-package/MyFirstElement"` we can see two methods have been created for us, `buildRendering` and `refreshRendering`.
-`buildRendering` is the most simplest of [lifecycle](https://github.com/ibm-js/delite/blob/master/docs/Widget.md#lifecycle)
+If we look at `"custom/CustomElement"` we can see two methods have been created for us, `render` and `refreshRendering`.
+`render` is the most simplest of [lifecycle](https://github.com/ibm-js/delite/blob/master/docs/Widget.md#lifecycle)
 methods we need to create our widget.
 
-#### `buildRendering`
-We normally wouldn't need to create a `buildRendering` method, typically we'd use templates to create our widget UI (which will be explained
-later on) but because we aren't currently using a template we need to implement `buildRendering` to construct the widget UI for us. <br>
-In our sample `buildRendering` method we're adding `<span>title</span>` and `<h1></h1>` elements to our widget (as well as assigning a property
-to the widget named `_h1` i.e. via `this.appendChild(this._h = this.ownerDocument.createElement("h1"));`.
+#### `render`
+We normally wouldn't need to create a `render` method, typically we'd use templates to create our widget UI (which will be explained
+later on) but because we aren't currently using a template we need to implement `render` to construct the widget UI for us. <br>
+In our sample `render` method we're adding `<span>title</span>` and `<h1></h1>` elements to our widget as well as assigning a property
+to the widget named `_h1` i.e. via `this.appendChild(this._h = this.ownerDocument.createElement("h1"));` which we can use to update
+it programmatically or declaratively.
 
 
 #### `refreshRendering`
@@ -173,6 +177,8 @@ If we wanted to see what the old value was (and also print it out to the DOM) we
             this._h.innerText = "old= '" + props["value"] + "', new='" + this.value + "'";
         }
     }
+
+TODO: GOT TO HERE
 
 Notice when you first load the page, this method will be called for each widget, this is because we're setting the `value` property on the
 declarative widget to `value="The Title"` and setting the value property on the programmatic widget to `value : "another custom element title"`.
@@ -355,7 +361,7 @@ We've changed HTML in the template, adding new properties and classes, so change
 
 
 #####Widget
-`./MyFirstTemplatedElement.js` :
+Change our widget `./MyFirstTemplatedElement.js` to :
 
     define([
         "delite/register",
@@ -376,7 +382,10 @@ We've changed HTML in the template, adding new properties and classes, so change
 We've added an object property to our widget named `articleDetails` (which has `publishDate` and `author` properties) and a property named
 `articleText`.
 
+TODO: an explanation
 
+#####Sample usage
+(add in programmatic as well as declarative)
 
 ## topics
 custom element
