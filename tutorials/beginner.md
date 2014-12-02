@@ -76,9 +76,9 @@ Expand upon these resources & then add templating, then theming, internationalis
 
 ## Creating a custom element
 Viewing the `./samples/CustomElement.html` example HTML we can see we've (partly) created the custom element declaratively in markup via
-
-    <custom-element id="element" value="The Title"></custom-element>
-
+```html
+<custom-element id="element" value="The Title"></custom-element>
+```
 For those who used the Dojo Toolkit Dijit framework previously, an important conceptual difference in delite is that the widget is the DOM node.
 Dijit widgets instead, had a property which referenced the DOM node.
 
@@ -89,13 +89,9 @@ the `delite/register` module. This is analogous to the HTML specification for re
 i.e. `document.registerElement('custom-element');`
 
 If we look at the custom element module `./CustomElement.js` we see we register the custom element tag via:
-
 ```js
-
 return register("custom-element", [HTMLElement, Widget], { .....
-
 ```
-
 TODO: NOTE SURE WHAT THIS MEANS, THIS WAS FOR AN OLDER VERSION OF THE PARSER??:
 (Note that here, we're not explicitly requiring the module for the custom element i.e. `"custom/CustomElement"`,
 `delite/register` takes care of this for us for declarative created widgets).
@@ -137,7 +133,6 @@ require(["delite/register", "custom/CustomElement"], function (register) {
 ```
 
 to the following:
-
 ```js
 require(["delite/register", "custom/CustomElement"], function (register, CustomElement) {
     register.parse();
@@ -151,15 +146,12 @@ require(["delite/register", "custom/CustomElement"], function (register, CustomE
 Note that programmatically created widgets should always call `startup()`. A helper function is provided for `delite/Widget` to place it
 somewhere in the DOM named `placeAt`
 (see the [documentation](https://github.com/ibm-js/delite/blob/master/docs/Widget.md#placement) for it's usage).
-We need to also require the module for the custom element i.e. `"custom/CustomElement"` because we need to create a new
-instance and then call it's methods.
+We need to also require the module for the custom element i.e. `"custom/CustomElement"` because we need to create a new instance and then call it's methods.
 
 
 The above would render: (default image width 460x242)
 
-
 <img src='./images/programmatic_custom_element.gif'/>
-
 
 **TODO: then go on to explain what prototyping `"delite/Widget"` does i.e. lifecycle methods**
 
@@ -242,10 +234,11 @@ define([
 ```
 
 Then create this new CSS file at `./MyFirstElement/css/MyFirstElementSpan.css` with
-
-    .my-first-element span {
-        color: blue;
-    }
+```css
+.my-first-element span {
+    color: blue;
+}
+```
 Reload the page and you'll see the new CSS file being loaded in your development tools and the new style being applied.
 
 Obviously this is an unrealistic example but shows how the `delite/css!` plugin can be used. Later on, we'll show how to use the theming capabilities.
@@ -253,11 +246,11 @@ Obviously this is an unrealistic example but shows how the `delite/css!` plugin 
 
 ## Lifecycle methods for our simple widget (expand on later when using template or do this here?)
 Explain the main lifecycle methods
-
-	this.preCreate();
-	this.buildRendering();
-	this.postCreate();
-
+```js
+this.preCreate();
+this.buildRendering();
+this.postCreate();
+```
 ##Templates
 What we've done so far is obviously a very rudimentary demonstration. We wouldn't expect to programmatically create DOM nodes & this is where
 delite comes into it's own. Out of the box, delite supports templates using an in built implementation of [Handlebars](http://handlebarsjs.com/).
@@ -309,12 +302,12 @@ This, as shown in the console output, creates:
 
 ###Handlebars
 If we look at the template we just created `./MyFirstTemplatedElement/MyFirstTemplatedElement.html` we can see it's created the following:
-
-    <template>
-        title:
-        <h1>{{value}}</h1>
-    </template>
-
+```html
+<template>
+    title:
+    <h1>{{value}}</h1>
+</template>
+```
 All templates must be enclosed in a `<template>` element, we can see all the work we did in the `buildRendering` lifecycle method becomes much
 more simple because now we're just dealing with HTML.
 
@@ -329,7 +322,6 @@ define([
 ], function (register, Widget, template) {
     return register("my-first-templated-element", [HTMLElement, Widget], {
         baseClass: "my-first-templated-element",
-
         value: "",
         template: template
     });
@@ -337,12 +329,10 @@ define([
 ```
 
 All we need to do now is include the template using the handlebars plugin i.e.
-`"delite/handlebars!./MyFirstTemplatedElement/MyFirstTemplatedElement.html"` and instead assign the resolved template to the `template` property
- of our widget i.e. `template: template`.
+`"delite/handlebars!./MyFirstTemplatedElement/MyFirstTemplatedElement.html"` and instead assign the resolved template to the `template` property of our widget i.e. `template: template`.
 
 ####Using handlebars templates
-* im changing the title to an h2 (change css too), wrap in an `<article>` tag and add an object with properties (ive asked bill a question
-about innerHTML of declarative elements and how to bind to widget/template properties)
+* im changing the title to an h2 (change css too), wrap in an `<article>` tag and add an object with properties (ive asked bill a question about innerHTML of declarative elements and how to bind to widget/template properties)
 
 
 What we've done so far isn't very exciting, so lets try and do something more 'real life'. Imagine we need to implement blogging widgets.
@@ -353,38 +343,37 @@ Let's make some changes:
 #####Template
 Change our template to add new properties for a blog author, when the blog was published and the text of the blog
 in `./MyFirstTemplatedElement/MyFirstTemplatedElement.html`:
-
-    <template>
-        <article>
-            <h3>{{value}}</h3>
-            <p class='blogdetails'>Published at <span>{{articleDetails.publishDate}}</span> by <span>{{articleDetails.author}}</span></p>
-            <p class='blog'>{{articleText}}</p>
-        </article>
-    </template>
-
-`{{articleDetails.publishDate}}` and `{{articleDetails.author}}` are _path_ bindings to widget properties i.e. an object `articleDetails`
-which has properties `publishDate` and `author`.
+```html
+<template>
+    <article>
+        <h3>{{value}}</h3>
+        <p class='blogdetails'>Published at <span>{{articleDetails.publishDate}}</span> by <span>{{articleDetails.author}}</span></p>
+        <p class='blog'>{{articleText}}</p>
+    </article>
+</template>
+```
+`{{articleDetails.publishDate}}` and `{{articleDetails.author}}` are _path_ bindings to widget properties i.e. an object `articleDetails` which has properties `publishDate` and `author`.
 
 
 #####Template CSS
 We've changed HTML in the template, adding new properties and classes, so change `./MyFirstTemplatedElement/css/MyFirstTemplatedElement.css` to:
+```css
+.my-first-templated-element {
+    display: block;
+}
 
-    .my-first-templated-element {
-        display: block;
-    }
+.my-first-templated-element h3 {
+    color: red;
+}
 
-    .my-first-templated-element h3 {
-        color: red;
-    }
+.my-first-templated-element p.blogdetails span {
+    font-weight: bold;
+}
 
-    .my-first-templated-element p.blogdetails span {
-        font-weight: bold;
-    }
-
-    .my-first-templated-element p.blog {
-        padding-left: 20px;
-    }
-
+.my-first-templated-element p.blog {
+    padding-left: 20px;
+}
+```
 
 #####Widget
 Change our widget `./MyFirstTemplatedElement.js` to :
@@ -398,17 +387,15 @@ define([
 ], function (register, Widget, template) {
     return register("my-first-templated-element", [HTMLElement, Widget], {
         baseClass: "my-first-templated-element",
-
         value: "",
         template: template,
         articleDetails: {publishDate: 'foo', author: 'blah'},
         articleText : 'default article text'
     });
-});
+});ex
 ```
 
-We've added an object property to our widget named `articleDetails` (which has `publishDate` and `author` properties) and a property named
-`articleText`.
+We've added an object property to our widget named `articleDetails` (which has `publishDate` and `author` properties) and a property named `articleText`.
 
 TODO: an explanation
 
