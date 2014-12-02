@@ -134,7 +134,7 @@ edit `./samples/CustomElement.html` i.e.
 require(["delite/register", "custom/CustomElement"], function (register) {
     register.parse();
 });
-```js
+```
 
 to the following:
 
@@ -146,7 +146,7 @@ require(["delite/register", "custom/CustomElement"], function (register, CustomE
     anotherCustomElement.placeAt(document.body, 'last');
     anotherCustomElement.startup();
 });
-```js
+```
 
 Note that programmatically created widgets should always call `startup()`. A helper function is provided for `delite/Widget` to place it
 somewhere in the DOM named `placeAt`
@@ -191,7 +191,7 @@ refreshRendering: function (props) {
         this._h.innerText = "old= '" + props["value"] + "', new='" + this.value + "'";
     }
 }
-```js
+```
 
 Notice when you first load the page, this method will be called for each widget & if you debug this method when you reload the page
 you'll see that the `value` property of our widget is contained in the `props` argument. This is because we're setting the `value` property
@@ -207,15 +207,18 @@ argument.
 
 Also, if you update the value `property` of `./CustomeElement.js` to:
 
-    value: "The Title",
+```js
+value: "The Title",
+```
 
 You'd notice again the `value` property of our widget is NOT contained in the `props` argument. This is because the property value hasn't changed.
 The [decor/Invalidating](https://github.com/ibm-js/decor/blob/master/docs/Invalidating.md) documentation explains th
 
 Lets undo this, change it back to
 
-    value: "",
-
+```js
+value: "",
+```
 
 TODO: GOT TO HERE
 
@@ -230,11 +233,13 @@ for our custom element, it can also take a list of CSS files to load so lets see
 
 Change the `define` of our custom element to the following:
 
-    define([
-        "delite/register",
-        "delite/Widget",
-        "decor/Invalidating",
-        "delite/css!./MyFirstElement/css/MyFirstElement.css,./MyFirstElement/css/MyFirstElementSpan.css"
+```js
+define([
+    "delite/register",
+    "delite/Widget",
+    "decor/Invalidating",
+    "delite/css!./MyFirstElement/css/MyFirstElement.css,./MyFirstElement/css/MyFirstElementSpan.css"
+```
 
 Then create this new CSS file at `./MyFirstElement/css/MyFirstElementSpan.css` with
 
@@ -315,19 +320,21 @@ more simple because now we're just dealing with HTML.
 
 We don't need to implement the code in `buildRendering` of the non-templated example e.g. See our `./MyFirstTemplatedElement.js` widget module
 
-    define([
-        "delite/register",
-        "delite/Widget",
-        "delite/handlebars!./MyFirstTemplatedElement/MyFirstTemplatedElement.html",
-        "delite/css!./MyFirstTemplatedElement/css/MyFirstTemplatedElement.css"
-    ], function (register, Widget, template) {
-        return register("my-first-templated-element", [HTMLElement, Widget], {
-            baseClass: "my-first-templated-element",
+```js
+define([
+    "delite/register",
+    "delite/Widget",
+    "delite/handlebars!./MyFirstTemplatedElement/MyFirstTemplatedElement.html",
+    "delite/css!./MyFirstTemplatedElement/css/MyFirstTemplatedElement.css"
+], function (register, Widget, template) {
+    return register("my-first-templated-element", [HTMLElement, Widget], {
+        baseClass: "my-first-templated-element",
 
-            value: "",
-            template: template
-        });
+        value: "",
+        template: template
     });
+});
+```
 
 All we need to do now is include the template using the handlebars plugin i.e.
 `"delite/handlebars!./MyFirstTemplatedElement/MyFirstTemplatedElement.html"` and instead assign the resolved template to the `template` property
@@ -382,21 +389,23 @@ We've changed HTML in the template, adding new properties and classes, so change
 #####Widget
 Change our widget `./MyFirstTemplatedElement.js` to :
 
-    define([
-        "delite/register",
-        "delite/Widget",
-        "delite/handlebars!./MyFirstTemplatedElement/MyFirstTemplatedElement.html",
-        "delite/css!./MyFirstTemplatedElement/css/MyFirstTemplatedElement.css"
-    ], function (register, Widget, template) {
-        return register("my-first-templated-element", [HTMLElement, Widget], {
-            baseClass: "my-first-templated-element",
+```js
+define([
+    "delite/register",
+    "delite/Widget",
+    "delite/handlebars!./MyFirstTemplatedElement/MyFirstTemplatedElement.html",
+    "delite/css!./MyFirstTemplatedElement/css/MyFirstTemplatedElement.css"
+], function (register, Widget, template) {
+    return register("my-first-templated-element", [HTMLElement, Widget], {
+        baseClass: "my-first-templated-element",
 
-            value: "",
-            template: template,
-            articleDetails: {publishDate: 'foo', author: 'blah'},
-            articleText : 'default article text'
-        });
+        value: "",
+        template: template,
+        articleDetails: {publishDate: 'foo', author: 'blah'},
+        articleText : 'default article text'
     });
+});
+```
 
 We've added an object property to our widget named `articleDetails` (which has `publishDate` and `author` properties) and a property named
 `articleText`.
