@@ -34,7 +34,7 @@ Install the `generator-delite-element` globally
 
     npm install -g generator-delite-element
 
-And create a new directory (named first-delite-package, which will also be our package name) and change directory to it using the command :
+And create a new directory (named `custom`, which will also be our package name) and change directory to it using the command :
 
     mkdir -p custom
     cd custom
@@ -55,7 +55,7 @@ You'll be prompted to enter the widget package name & the name of the custom wid
     ? Do you want to use build version of delite package (instead of source version)? n
 
 ### A look through what's been generated
-Lets look through what Yeoman created, again this is just a boilerplate setup but here's the important components.
+Lets look through what Yeoman created, again this is just a boilerplate setup but here's the important parts.
 
 We've created a new package named `custom` for new widgets that we'll create.
 
@@ -96,7 +96,7 @@ TODO: NOTE SURE WHAT THIS MEANS, THIS WAS FOR AN OLDER VERSION OF THE PARSER??:
 (Note that here, we're not explicitly requiring the module for the custom element i.e. `"custom/CustomElement"`,
 `delite/register` takes care of this for us for declarative created widgets).
 
-This is an important concept which sometimes isn't clear at a first glance. You can add any non-standard tag to an HTML page and the HTML parser
+This is an important concept which sometimes isn't clear at a first glance. You can add any non-standard tag to an HTML page and the browser HTML parser
 will not complain, this is because these elements will be defined as a native
 [`HTMLUnknownElement`](http://www.whatwg.org/specs/web-apps/current-work/multipage/dom.html#htmlunknownelement).
 To create a custom element it must be **upgraded** first, this is what `delite/register` does. `delite/register` supports browsers who natively
@@ -110,7 +110,7 @@ using [valid custom element names](http://www.w3.org/TR/2013/WD-custom-elements-
 The most basic requirement for the tag name is it **MUST** contain a dash **(-)**.
 
 ###Declarative creation of custom elements
-If we view `./samples/CustomElement.html`, we see the following code:
+If we view the generated sample HTML `./samples/CustomElement.html`, we see the following code:
 
 ```js
 require(["delite/register", "custom/CustomElement"], function (register) {
