@@ -178,28 +178,33 @@ If we wanted to see what the old value was (and also print it out to the DOM) we
         }
     }
 
-TODO: GOT TO HERE
 
-Notice when you first load the page, this method will be called for each widget, this is because we're setting the `value` property on the
-declarative widget to `value="The Title"` and setting the value property on the programmatic widget to `value : "another custom element title"`.
+Notice when you first load the page, this method will be called for each widget & if you debug this method when you reload the page
+you'll see that the `value` property of our widget is contained in the `props` argument. This is because we're setting the `value` property
+on the declarative widget to `value="The Title"` and setting the value property on the programmatic widget to `value : "another custom element title"`.
+If you don't set the `value` property of the widget at construction time, the `value` property of our widget is NOT contained in the `props` argument.
 
 Click the 'click to change title button' which will render like:
 
 <img src='./images/custom_element_old_new_props.gif'/>
 
-**TODO** : (review this, maybe not needed but it is weird behaviour, maybe some direction here to set an initial default value? e.g. angular
-has the ngBindTemplate directive)
-If you updated the value `property` of `./MyFirstElement.js` to:
+If you still have a breakpoint set in `refreshRendering` you will see again that the `value` property of our widget is again contained in the `props`
+argument.
+
+Also, if you update the value `property` of `./CustomeElement.js` to:
 
     value: "The Title",
 
-You'd notice that the `if ("value" in props) {` condition isn't true for the declarative custom element we added. This is because the property
-value hasn't changed.
+You'd notice again the `value` property of our widget is NOT contained in the `props` argument. This is because the property value hasn't changed.
+The [decor/Invalidating](https://github.com/ibm-js/decor/blob/master/docs/Invalidating.md) documentation explains this in more detail.
 
 Lets undo this, change it back to
 
     value: "",
-**END TODO**
+
+
+TODO: GOT TO HERE
+
 
 ###CSS
 TODO: note this no longer works as per recent updates
