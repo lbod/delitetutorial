@@ -90,7 +90,12 @@ i.e. `document.registerElement('custom-element');`
 
 If we look at the custom element module `./CustomElement.js` we see we register the custom element tag via:
 
-    return register("custom-element", [HTMLElement, Widget], { .....
+```js
+
+return register("custom-element", [HTMLElement, Widget], { .....
+
+```
+
 TODO: NOTE SURE WHAT THIS MEANS, THIS WAS FOR AN OLDER VERSION OF THE PARSER??:
 (Note that here, we're not explicitly requiring the module for the custom element i.e. `"custom/CustomElement"`,
 `delite/register` takes care of this for us for declarative created widgets).
@@ -111,9 +116,12 @@ The most basic requirement for the tag name is it **MUST** contain a dash **(-)*
 ###Declarative creation of custom elements
 If we view `./samples/CustomElement.html`, we see the following code:
 
-    require(["delite/register", "custom/CustomElement"], function (register) {
-    	register.parse();
-    });
+```js
+require(["delite/register", "custom/CustomElement"], function (register) {
+    register.parse();
+});
+```
+
 Declarative widgets (those created via markup in the page) need to be parsed in order to kick off the lifecycle of creating the widget.
 
 ###Programatic creation of custom elements
@@ -122,18 +130,23 @@ with programmatic creation
 
 edit `./samples/CustomElement.html` i.e.
 
-    require(["delite/register", "custom/CustomElement"], function (register) {
-    	register.parse();
-    });
+```js
+require(["delite/register", "custom/CustomElement"], function (register) {
+    register.parse();
+});
+```js
+
 to the following:
 
-    require(["delite/register", "custom/CustomElement"], function (register, CustomElement) {
-        register.parse();
-        var anotherCustomElement = new CustomElement({value : 'another custom element title'});
-        // note you must call startup() for programmatically created widgets
-        anotherCustomElement.placeAt(document.body, 'last');
-        anotherCustomElement.startup();
-    });
+```js
+require(["delite/register", "custom/CustomElement"], function (register, CustomElement) {
+    register.parse();
+    var anotherCustomElement = new CustomElement({value : 'another custom element title'});
+    // note you must call startup() for programmatically created widgets
+    anotherCustomElement.placeAt(document.body, 'last');
+    anotherCustomElement.startup();
+});
+```js
 
 Note that programmatically created widgets should always call `startup()`. A helper function is provided for `delite/Widget` to place it
 somewhere in the DOM named `placeAt`
@@ -171,13 +184,14 @@ you place a breakpoint in that method and then click the "click to change title"
 
 If we wanted to see what the old value was (and also print it out to the DOM) we can change this method to the following:
 
-    refreshRendering: function (props) {
-        // if the value change update the display
-        if ("value" in props) {
-            this._h.innerText = "old= '" + props["value"] + "', new='" + this.value + "'";
-        }
+```js
+refreshRendering: function (props) {
+    // if the value change update the display
+    if ("value" in props) {
+        this._h.innerText = "old= '" + props["value"] + "', new='" + this.value + "'";
     }
-
+}
+```js
 
 Notice when you first load the page, this method will be called for each widget & if you debug this method when you reload the page
 you'll see that the `value` property of our widget is contained in the `props` argument. This is because we're setting the `value` property
@@ -196,7 +210,7 @@ Also, if you update the value `property` of `./CustomeElement.js` to:
     value: "The Title",
 
 You'd notice again the `value` property of our widget is NOT contained in the `props` argument. This is because the property value hasn't changed.
-The [decor/Invalidating](https://github.com/ibm-js/decor/blob/master/docs/Invalidating.md) documentation explains this in more detail.
+The [decor/Invalidating](https://github.com/ibm-js/decor/blob/master/docs/Invalidating.md) documentation explains th
 
 Lets undo this, change it back to
 
