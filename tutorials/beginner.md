@@ -204,7 +204,7 @@ value: "The Title",
 ```
 
 You'd notice again the `value` property of our widget is NOT contained in the `props` argument. This is because the property value hasn't changed.
-The [decor/Invalidating](https://github.com/ibm-js/decor/blob/master/docs/Invalidating.md) documentation explains th
+The [decor/Invalidating](https://github.com/ibm-js/decor/blob/master/docs/Invalidating.md) documentation explains this behaviour.
 
 Lets undo this, change it back to
 
@@ -212,55 +212,34 @@ Lets undo this, change it back to
 value: "",
 ```
 
-TODO: GOT TO HERE
-
-
 ###CSS
-TODO: note this no longer works as per recent updates
 
-If we look at the `./MyFirstElement.js` custom element module, we see there's a property defined named `baseClass` i.e. `baseClass: "my-first-element"`.
+If we look at the `./CustomeElement.js` custom element module, we see there's a property defined named `baseClass` i.e. `baseClass: "custom-element"`.
 This adds a class name to the root node of our custom element (which you can see in the DOM using your debugger tools). Also notice we include
-in the `define` the `delite/css!` plugin i.e. `"delite/css!./MyFirstElement/css/MyFirstElement.css"`. This plugin is obviously used to load CSS
-for our custom element, it can also take a list of CSS files to load so lets see this in action.
-
-Change the `define` of our custom element to the following:
-
-```js
-define([
-    "delite/register",
-    "delite/Widget",
-    "decor/Invalidating",
-    "delite/css!./MyFirstElement/css/MyFirstElement.css,./MyFirstElement/css/MyFirstElementSpan.css"
-```
-
-Then create this new CSS file at `./MyFirstElement/css/MyFirstElementSpan.css` with
-```css
-.my-first-element span {
-    color: blue;
-}
-```
-Reload the page and you'll see the new CSS file being loaded in your development tools and the new style being applied.
-
-Obviously this is an unrealistic example but shows how the `delite/css!` plugin can be used. Later on, we'll show how to use the theming capabilities.
+in the `define` the `requirejs-dplugins/css!` plugin to load our css i.e. `"requirejs-dplugins/css!./CustomElement/css/CustomElement.css"`.
+This plugin is obviously used to load CSS for our custom element. There's nothing much to say here apart from this is how you individually style
+your components and [TODO] also at build time i.e. compiling `less` files, you won't load these files individually.
 
 
 ## Lifecycle methods for our simple widget (expand on later when using template or do this here?)
 Explain the main lifecycle methods
 ```js
 this.preCreate();
-this.buildRendering();
+this.render();
 this.postCreate();
 ```
 ##Templates
 What we've done so far is obviously a very rudimentary demonstration. We wouldn't expect to programmatically create DOM nodes & this is where
 delite comes into it's own. Out of the box, delite supports templates using an in built implementation of [Handlebars](http://handlebarsjs.com/).
-We won't need to programmatically create DOM nodes in `buildRendering`, creating a template will do all the work for us.
+We won't need to programmatically create DOM nodes in `render`, creating a template will do all the work for us.
 
-(Note there are some limitations using the `delite/handlebars!` plugin in delite, namely it doesn't support iterators or TODO: conditionals,
+(Note there are some limitations using the `delite/handlebars!` plugin in delite, namely it doesn't support iterators or conditionals,
 however in most cases this isn't a limiting factor. Support for this will be explained in a later more advanced tutorial when we discuss
 [Liaison](https://github.com/ibm-js/liaison). The handlebars implementation delite implements is primarily focused on performance).
 
 We'll create a new delite custom element using Yeoman again.
+
+TODO: GOT TO HERE
 
 In our `first-delite-package` folder run the `generator-delite-element` Yeoman generator with the following options (overwrite any files when
 promoted):
