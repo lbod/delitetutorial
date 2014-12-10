@@ -23,7 +23,7 @@ These steps are already explained but we'll repeat that documentation using Yeom
 
 ---
 
-**TODO: setup to be reviewed - this is WS project custom **
+__TODO: - this is WS project custom__
 
 ### create the scaffold
 
@@ -233,11 +233,13 @@ What we've done so far is obviously a very rudimentary demonstration. We wouldn'
 delite comes into it's own. Out of the box, delite supports templates using an in built implementation of [Handlebars](http://handlebarsjs.com/).
 We won't need to programmatically create DOM nodes in `render`, creating a template will do all the work for us.
 
-(Note there are some limitations using the `delite/handlebars!` plugin in delite, namely it doesn't support iterators or conditionals,
-however in most cases this isn't a limiting factor. Support for this will be explained in a later more advanced tutorial when we discuss
-[Liaison](https://github.com/ibm-js/liaison). The handlebars implementation delite uses is primarily focused on performance).
+Note there are some limitations using the `delite/handlebars!` plugin in delite for templating, namely it doesn't support iterators or conditionals
+however in many cases this isn't a limiting factor. Support for this will be explained in a later more advanced tutorial when we discuss
+[Liaison](https://github.com/ibm-js/liaison). The handlebars template implementation delite uses is primarily focused on performance.
 
 We'll create a new delite custom element using Yeoman again.
+
+__TODO: - this is WS project custom-templated__
 
 Create a new directory somewhere (named `custom-templated`, which will also be our package name) and change directory to it using the command :
 
