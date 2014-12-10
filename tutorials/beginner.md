@@ -235,7 +235,7 @@ We won't need to programmatically create DOM nodes in `render`, creating a templ
 
 (Note there are some limitations using the `delite/handlebars!` plugin in delite, namely it doesn't support iterators or conditionals,
 however in most cases this isn't a limiting factor. Support for this will be explained in a later more advanced tutorial when we discuss
-[Liaison](https://github.com/ibm-js/liaison). The handlebars implementation delite implements is primarily focused on performance).
+[Liaison](https://github.com/ibm-js/liaison). The handlebars implementation delite uses is primarily focused on performance).
 
 We'll create a new delite custom element using Yeoman again.
 
@@ -249,7 +249,7 @@ Run Yeoman again to create our scaffold
     yo delite-element
 
 You'll be prompted to enter the widget package name & the name of the custom widget element, accept the defaults for delite widget element package
-& delite widget element name, select no for the rest of the options.
+& delite widget element name, select Yes for the template option and no for the rest.
 
     ? What is the name of your delite widget element package? (custom-templated)
     ? What do you want to call your delite widget element (must contain a dash)? (custom-templated-element)
