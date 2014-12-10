@@ -239,76 +239,72 @@ however in most cases this isn't a limiting factor. Support for this will be exp
 
 We'll create a new delite custom element using Yeoman again.
 
-TODO: GOT TO HERE
+Create a new directory somewhere (named `custom-templated`, which will also be our package name) and change directory to it using the command :
 
-In our `first-delite-package` folder run the `generator-delite-element` Yeoman generator with the following options (overwrite any files when
-promoted):
+    mkdir -p custom-templated
+    cd custom-templated
+
+Run Yeoman again to create our scaffold
 
     yo delite-element
 
-    [?] What is the name of your delite widget element package? first-delite-package
-    [?] What do you want to call your delite widget element (must contain a dash)? my-first-templated-element
-    [?] Would you like your delite element to be built on a template? Yes
-    [?] Would you like your delite element to providing theming capabilities? No
-    [?] Will your delite element require string internationalization? No
-    [?] Will your delite element require pointer management? No
-       create MyFirstTemplatedElement/MyFirstTemplatedElement.html
-       create MyFirstTemplatedElement.js
-    identical package.json
-     conflict bower.json
-    [?] Overwrite bower.json? overwrite
-        force bower.json
-     conflict README.md
-    [?] Overwrite README.md? overwrite
-        force README.md
-       create MyFirstTemplatedElement/css/MyFirstTemplatedElement.css
-       create tests/MyFirstTemplatedElement.js
-     conflict tests/intern.js
-    [?] Overwrite tests/intern.js? overwrite
-        force tests/intern.js
-    identical tests/intern.local.js
-    identical tests/intern.browser.js
-    identical Gruntfile.js
-       create samples/MyFirstTemplatedElement.html
-    identical .jshintrc
+You'll be prompted to enter the widget package name & the name of the custom widget element, accept the defaults for delite widget element package
+& delite widget element name, select no for the rest of the options.
+
+    ? What is the name of your delite widget element package? (custom-templated)
+    ? What do you want to call your delite widget element (must contain a dash)? (custom-templated-element)
+    ? Would you like your delite element to be built on a template? Y
+    ? Would you like your delite element to providing theming capabilities? N
+    ? Will your delite element require string internationalization? N
+    ? Will your delite element require pointer management? N
+    ? Do you want to use build version of delite package (instead of source version)? N
+
 
 This, as shown in the console output, creates:
 
-- `./MyFirstTemplatedElement.js` - this is our widget module
-- `./MyFirstTemplatedElement/css/MyFirstTemplatedElement.css` - this is our widget css
-- `./MyFirstTemplatedElement/MyFirstTemplatedElement.html` - this is our widget template
-- `./samples/MyFirstTemplatedElement.html` - this is a sample how to use our new widget
+- `./CustomTemplatedElement.js` - this is our widget module
+- `./CustomTemplatedElement/css/CustomTemplatedElement.css` - this is our widget css
+- `./CustomTemplatedElement/CustomTemplatedElement.html` - this is our widget template
+- `./samples/CustomTemplatedElement.html` - this is a sample how to use our new widget
+
 
 ###Handlebars
-If we look at the template we just created `./MyFirstTemplatedElement/MyFirstTemplatedElement.html` we can see it's created the following:
+If we look at the template we just created `./CustomTemplatedElement/CustomTemplatedElement.html` we can see it's created the following:
+
 ```html
 <template>
     title:
     <h1>{{value}}</h1>
 </template>
 ```
-All templates must be enclosed in a `<template>` element, we can see all the work we did in the `buildRendering` lifecycle method becomes much
+
+All templates must be enclosed in a `<template>` element, we can see all the work we did in the `render` lifecycle method becomes much
 more simple because now we're just dealing with HTML.
 
-We don't need to implement the code in `buildRendering` of the non-templated example e.g. See our `./MyFirstTemplatedElement.js` widget module
+We don't need to implement the code in `render` of the non-templated example e.g. See our `./CustomElement.js` widget module in the previous example.
+Instead we have:
 
 ```js
+
 define([
-    "delite/register",
-    "delite/Widget",
-    "delite/handlebars!./MyFirstTemplatedElement/MyFirstTemplatedElement.html",
-    "delite/css!./MyFirstTemplatedElement/css/MyFirstTemplatedElement.css"
+	"delite/register",
+	"delite/Widget",
+	"delite/handlebars!./CustomTemplatedElement/CustomTemplatedElement.html",
+    "delite/css!./CustomTemplatedElement/css/CustomTemplatedElement.css"
 ], function (register, Widget, template) {
-    return register("my-first-templated-element", [HTMLElement, Widget], {
-        baseClass: "my-first-templated-element",
-        value: "",
-        template: template
-    });
+	return register("custom-templated-element", [HTMLElement, Widget], {
+		baseClass: "custom-templated-element",
+		value: "",
+		template: template
+	});
 });
+
 ```
 
-All we need to do now is include the template using the handlebars plugin i.e.
-`"delite/handlebars!./MyFirstTemplatedElement/MyFirstTemplatedElement.html"` and instead assign the resolved template to the `template` property of our widget i.e. `template: template`.
+We just need to include the template using the handlebars plugin i.e.
+`"delite/handlebars!./CustomTemplatedElement/CustomTemplatedElement.html"` and assign the resolved template to the `template` property of our widget i.e. `template: template`.
+
+TODO: GOT TO HERE
 
 ####Using handlebars templates
 * im changing the title to an h2 (change css too), wrap in an `<article>` tag and add an object with properties (ive asked bill a question about innerHTML of declarative elements and how to bind to widget/template properties)
