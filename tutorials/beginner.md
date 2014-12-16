@@ -23,7 +23,7 @@ These steps are already explained but we'll repeat that documentation using Yeom
 
 ---
 
-__TODO: - this is WS project custom__
+__ TODO: - this is WS project custom __
 
 ### create the scaffold
 
@@ -92,6 +92,9 @@ If we look at the custom element module `./CustomElement.js` we see we register 
 ```js
 return register("custom-element", [HTMLElement, Widget], { .....
 ```
+Note that we just accepted the default names the `yo` generator created for us. In case there's any confusion, the module name created `CustomElement` bears
+no relation to the custom element name i.e. `custom-element`.
+
 TODO: NOTE SURE WHAT THIS MEANS, THIS WAS FOR AN OLDER VERSION OF THE PARSER??:
 (Note that here, we're not explicitly requiring the module for the custom element i.e. `"custom/CustomElement"`,
 `delite/register` takes care of this for us for declarative created widgets).
@@ -239,7 +242,7 @@ however in many cases this isn't a limiting factor. Support for this will be exp
 
 We'll create a new delite custom element using Yeoman again.
 
-__TODO: - this is WS project custom-templated__
+__TODO: - this is WS project custom-templated       __
 
 Create a new directory somewhere (named `custom-templated`, which will also be our package name) and change directory to it using the command :
 
@@ -292,7 +295,7 @@ define([
 	"delite/register",
 	"delite/Widget",
 	"delite/handlebars!./CustomTemplatedElement/CustomTemplatedElement.html",
-    "delite/css!./CustomTemplatedElement/css/CustomTemplatedElement.css"
+    "requirejs-dplugins/css!./CustomTemplatedElement/css/CustomTemplatedElement.css"
 ], function (register, Widget, template) {
 	return register("custom-templated-element", [HTMLElement, Widget], {
 		baseClass: "custom-templated-element",
@@ -306,12 +309,7 @@ define([
 We just need to include the template using the handlebars plugin i.e.
 `"delite/handlebars!./CustomTemplatedElement/CustomTemplatedElement.html"` and assign the resolved template to the `template` property of our widget i.e. `template: template`.
 
-TODO: GOT TO HERE
-
 ####Using handlebars templates
-* im changing the title to an h2 (change css too), wrap in an `<article>` tag and add an object with properties (ive asked bill a question about innerHTML of declarative elements and how to bind to widget/template properties)
-
-
 What we've done so far isn't very exciting, so lets try and do something more 'real life'. Imagine we need to implement blogging widgets.
 The widget needs to show the blog title (which we've already done with `{{value}}`, a date it was published, the author and the content of the
 blog.
@@ -319,65 +317,151 @@ blog.
 Let's make some changes:
 #####Template
 Change our template to add new properties for a blog author, when the blog was published and the text of the blog
-in `./MyFirstTemplatedElement/MyFirstTemplatedElement.html`:
+in `./CustomTemplatedElement/CustomTemplatedElement.html`:
 ```html
 <template>
     <article>
         <h3>{{value}}</h3>
-        <p class='blogdetails'>Published at <span>{{articleDetails.publishDate}}</span> by <span>{{articleDetails.author}}</span></p>
-        <p class='blog'>{{articleText}}</p>
+        <p class='blogdetails'>Published at <span>{{publishDate}}</span> by <span>{{author}}</span></p>
+        <div class='blog'>{{articleContent}}</div>
     </article>
 </template>
 ```
-`{{articleDetails.publishDate}}` and `{{articleDetails.author}}` are _path_ bindings to widget properties i.e. an object `articleDetails` which has properties `publishDate` and `author`.
+#####Widget
+So we've added some new properties, which you see is very easy to do, all we need to do now is map those properties in the widget :
 
+```js
+define([
+	"delite/register",
+	"delite/Widget",
+	"delite/handlebars!./CustomTemplatedElement/CustomTemplatedElement.html",
+    "requirejs-dplugins/css!./CustomTemplatedElement/css/CustomTemplatedElement.css"
+], function (register, Widget, template) {
+	return register("custom-templated-element", [HTMLElement, Widget], {
+		baseClass: "custom-templated-element",
 
-#####Template CSS
-We've changed HTML in the template, adding new properties and classes, so change `./MyFirstTemplatedElement/css/MyFirstTemplatedElement.css` to:
+		value: "",
+		publishDate: new Date().toString(),
+		author: "",
+		articleContent : "",
+		template: template
+	});
+});
+
+```
+
+Note that I've added a default value for `publishDate`, just in case setting a date was optional.
+
+#####Sample usage
+So now if you change the content of `./samples/CustomTemplatedElement.html` to the following:
+
+```html
+<custom-templated-element id="element" value="A very lazy day" publishDate="Nov 27th 2014" author="My good self" articleContent="Not doing much today because I've ate too much turkey."></custom-templated-element>
+<button onclick="element.value='Now sleeping!'; event.target.disabled=true">click to change title</button>
+```
+
+And updating the template CSS `./CustomTemplatedElement/css/CustomTemplatedElement.css` to make it slightly more interesting to:
+
 ```css
-.my-first-templated-element {
+/* style for the custom element itself */
+.custom-templated-element {
     display: block;
 }
-
-.my-first-templated-element h3 {
+.custom-templated-element h3 {
     color: red;
 }
-
-.my-first-templated-element p.blogdetails span {
+.custom-templated-element p.blogdetails span {
     font-weight: bold;
 }
-
-.my-first-templated-element p.blog {
+.custom-templated-element div.blog {
     padding-left: 20px;
 }
 ```
 
+If you refresh the page you'll see it's becoming something more you'd envisage as a widget we may want to write.
+
+####containerNode and delite/Container
+Now is a good time to discuss the functionality provided by [delite/Container](https://github.com/ibm-js/delite/blob/master/docs/Container.md).
+Looking at the widget we've already created, the `articleContent` property of our widget might be seen as something which could be used to add arbitrary HTML
+that e.g. paragraph tags, list tags etc etc. If you try and add HTML content to the `articleContent` attribute of our sample `./samples/CustomTemplatedElement.html`
+you'll see that those tags are escaped.
+As explained in the `Container` documentation, it's to be used as a base class for widgets which contain other widgets. However it's also useful for our
+intentions where we want to add arbitrary HTML for the `articleContent`.
+
 #####Widget
-Change our widget `./MyFirstTemplatedElement.js` to :
+Lets update our widget to use this:
 
 ```js
 define([
-    "delite/register",
-    "delite/Widget",
-    "delite/handlebars!./MyFirstTemplatedElement/MyFirstTemplatedElement.html",
-    "delite/css!./MyFirstTemplatedElement/css/MyFirstTemplatedElement.css"
-], function (register, Widget, template) {
-    return register("my-first-templated-element", [HTMLElement, Widget], {
-        baseClass: "my-first-templated-element",
-        value: "",
-        template: template,
-        articleDetails: {publishDate: 'foo', author: 'blah'},
-        articleText : 'default article text'
-    });
-});ex
+	"delite/register",
+	"delite/Widget",
+	"delite/Container",
+	"delite/handlebars!./CustomTemplatedElement/CustomTemplatedElement.html",
+    "requirejs-dplugins/css!./CustomTemplatedElement/css/CustomTemplatedElement.css"
+], function (register, Widget, Container, template) {
+	return register("custom-templated-element", [HTMLElement, Widget, Container], {
+		baseClass: "custom-templated-element",
+
+		value: "",
+		publishDate: new Date().toString(),
+		author: "",
+		template: template
+	});
+});
+
 ```
 
-We've added an object property to our widget named `articleDetails` (which has `publishDate` and `author` properties) and a property named `articleText`.
+We've extended our widget using `delite/Container` (also removing the `articleContent` property which we don't need anymore).
 
-TODO: an explanation
+#####Widget template
+Update ./CustomTemplatedElement/CustomTemplatedElement.html` to the following:
+
+```html
+<template>
+    <article>
+        <h3>{{value}}</h3>
+        <div class='blog' attach-point="containerNode"></div>
+        <p class='blogdetails'>Published at <span>{{publishDate}}</span> by <span>{{author}}</span></p>
+    </article>
+</template>
+```
+
+Notice the `attach-point="containerNode"` attribute. This is a special 'pointer' to a DOM node which is used by `delite/Container`. When you inherit from
+`delite/Container`, it adds a property to our widget named `containerNode` and this maps to any HTML (or widgets) as children of our widget.
 
 #####Sample usage
-(add in programmatic as well as declarative)
+Change the content of `./samples/CustomTemplatedElement.html` to the following:
+
+```html
+<custom-templated-element id="element" value="A very lazy day" publishDate="Nov 27th 2014" author="My good self">
+    <h4>So I ate too much</h4>
+    <ol>
+        <li>Turkey</li>
+        <li>Cranberries</li>
+        <li>Roast potatoes</li>
+        <li>etc etc</li>
+    </ol>
+</custom-templated-element>
+<button onclick="element.value='Now sleeping!'; event.target.disabled=true">click to change title</button>
+```
+
+If you refresh your page now you should see something like the following:
+
+<img src='./images/custom_templated_containernode.gif'/>
+TODO: recapture image, looks bad
+
+You can see that the `attach-point="containerNode"` reference we created will render our declarative content wherever we've placed it in the template.
+If you open up your developer tools and in the console enter:
+
+```js
+document.getElementById('element').containerNode.innerHTML = "<i>And now we've replaced our containerNode content</i>"
+```
+
+You'll see that our widget containerNode `innerHTML` is updated to what we've added.
+
+TODO: GOT TO HERE
+
+
 
 ## topics
 custom element
