@@ -112,7 +112,7 @@ require(["delite/register", "custom/CustomElement"], function (register) {
 
 Declarative widgets (those created via markup in the page) need to be parsed in order to kick off the lifecycle of creating the widget.
 
-###Programatic creation of custom elements
+###Programmatic creation of custom elements
 The generated example in `./samples/CustomElement.html` shows the declarative creation of custom elements, you can do the same thing
 with programmatic creation
 
@@ -197,12 +197,6 @@ value: "The Title",
 
 You'd notice again the `value` property of our widget is NOT contained in the `props` argument. This is because the property value hasn't changed.
 The [decor/Invalidating](https://github.com/ibm-js/decor/blob/master/docs/Invalidating.md) documentation explains this behaviour.
-
-Lets undo this, change it back to
-
-```js
-value: "",
-```
 
 ###CSS
 
