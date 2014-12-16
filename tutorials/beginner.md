@@ -11,8 +11,6 @@ or other repositories.
 More information can be found on the [delite website](http://ibm-js.github.io/delite/) explaining the standards this library aims to conform to.
 
 ## Tutorial details
-**TODO maybe this could be multi-step, not sure how much should be in this tut yet**
-
 In this tutorial you'll learn how to create your own custom elements, learn how to register them, learn how to use templates
 & learn how you can bind data. It's a beginner tutorial so we won't be delving too deep into what delite provides (yet!!!)
 
@@ -20,10 +18,6 @@ In this tutorial you'll learn how to create your own custom elements, learn how 
 To quickly get started, we're using [https://github.com/ibm-js/generator-delite-element](https://github.com/ibm-js/generator-delite-element)
 to install the required dependencies and create a basic scaffold.
 These steps are already explained but we'll repeat that documentation using Yeoman to get started.
-
----
-
-__ TODO: - this is WS project custom __
 
 ### create the scaffold
 
@@ -94,10 +88,6 @@ return register("custom-element", [HTMLElement, Widget], { .....
 ```
 Note that we just accepted the default names the `yo` generator created for us. In case there's any confusion, the module name created `CustomElement` bears
 no relation to the custom element name i.e. `custom-element`.
-
-TODO: NOTE SURE WHAT THIS MEANS, THIS WAS FOR AN OLDER VERSION OF THE PARSER??:
-(Note that here, we're not explicitly requiring the module for the custom element i.e. `"custom/CustomElement"`,
-`delite/register` takes care of this for us for declarative created widgets).
 
 This is an important concept which sometimes isn't clear at a first glance. You can add any non-standard tag to an HTML page and the browser HTML parser
 will not complain, this is because these elements will be defined as a native
@@ -242,8 +232,6 @@ however in many cases this isn't a limiting factor. Support for this will be exp
 
 We'll create a new delite custom element using Yeoman again.
 
-__TODO: - this is WS project custom-templated       __
-
 Create a new directory somewhere (named `custom-templated`, which will also be our package name) and change directory to it using the command :
 
     mkdir -p custom-templated
@@ -339,7 +327,6 @@ define([
 ], function (register, Widget, template) {
 	return register("custom-templated-element", [HTMLElement, Widget], {
 		baseClass: "custom-templated-element",
-
 		value: "",
 		publishDate: new Date().toString(),
 		author: "",
@@ -380,7 +367,7 @@ And updating the template CSS `./CustomTemplatedElement/css/CustomTemplatedEleme
 
 If you refresh the page you'll see it's becoming something more you'd envisage as a widget we may want to write.
 
-####containerNode and delite/Container
+####delite/Container and containerNode
 Now is a good time to discuss the functionality provided by [delite/Container](https://github.com/ibm-js/delite/blob/master/docs/Container.md).
 Looking at the widget we've already created, the `articleContent` property of our widget might be seen as something which could be used to add arbitrary HTML
 e.g. paragraph tags, list tags etc etc. If you try and add HTML content to the `articleContent` attribute of our sample `./samples/CustomTemplatedElement.html`
@@ -401,7 +388,6 @@ define([
 ], function (register, Widget, Container, template) {
 	return register("custom-templated-element", [HTMLElement, Widget, Container], {
 		baseClass: "custom-templated-element",
-
 		value: "",
 		publishDate: new Date().toString(),
 		author: "",
@@ -448,6 +434,7 @@ Change the content of `./samples/CustomTemplatedElement.html` to the following:
 If you refresh your page now you should see something like the following:
 
 <img src='./images/custom_templated_containernode.gif'/>
+
 TODO: recapture image, looks bad
 
 You can see that the `attach-point="containerNode"` reference we created will render our declarative content wherever we've placed it in the template.
