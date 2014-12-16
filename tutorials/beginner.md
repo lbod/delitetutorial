@@ -364,7 +364,13 @@ If you refresh the page you'll see it's becoming something more you'd envisage a
 Now is a good time to discuss the functionality provided by [delite/Container](https://github.com/ibm-js/delite/blob/master/docs/Container.md).
 Looking at the widget we've already created, the `articleContent` property of our widget might be seen as something which could be used to add arbitrary HTML
 e.g. paragraph tags, list tags etc etc. If you try and add HTML content to the `articleContent` attribute of our sample `./samples/CustomTemplatedElement.html`
-you'll see that those tags are escaped.
+you'll see that any HTML tags added in the attribute value are escaped and not rendered as HTML; this is expected. Try it out e.g.
+
+```html
+<custom-templated-element id="element" value="A very lazy day" publishDate="Nov 27th 2014" author="My good self" articleContent="<b>my HTML tags are escaped</b>"></custom-templated-element>
+<button onclick="element.value='Now sleeping!'; event.target.disabled=true">click to change title</button>
+```
+
 As explained in the `Container` documentation, it's to be used as a base class for widgets which contain other widgets. However it's also useful for our
 intentions where we want to add arbitrary HTML for the `articleContent`.
 
