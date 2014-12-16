@@ -61,10 +61,11 @@ This is the most basic setup for a widget/custom component, you can view the sam
 in a browser to see what's been created.
 We'll build upon this example HTML as we progress in the tutorial.
 
+Note that we just accepted the default names the `yo` generator created for us. In case there's any confusion, the module name created `CustomElement` bears
+no relation to the custom element name i.e. `custom-element`.
+
     blurb about using dcl here? i.e. using requirejs we include dcl and delite/register which allows us to create a class
     via a module. It needs to be explained briefly but hint that you could do it inline in the page, not using a module.
-
-Expand upon these resources & then add templating, then theming, internationalisation and pointer management
 
 ---
 
@@ -86,8 +87,6 @@ If we look at the custom element module `./CustomElement.js` we see we register 
 ```js
 return register("custom-element", [HTMLElement, Widget], { .....
 ```
-Note that we just accepted the default names the `yo` generator created for us. In case there's any confusion, the module name created `CustomElement` bears
-no relation to the custom element name i.e. `custom-element`.
 
 This is an important concept which sometimes isn't clear at a first glance. You can add any non-standard tag to an HTML page and the browser HTML parser
 will not complain, this is because these elements will be defined as a native
