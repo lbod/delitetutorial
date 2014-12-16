@@ -383,7 +383,7 @@ If you refresh the page you'll see it's becoming something more you'd envisage a
 ####containerNode and delite/Container
 Now is a good time to discuss the functionality provided by [delite/Container](https://github.com/ibm-js/delite/blob/master/docs/Container.md).
 Looking at the widget we've already created, the `articleContent` property of our widget might be seen as something which could be used to add arbitrary HTML
-that e.g. paragraph tags, list tags etc etc. If you try and add HTML content to the `articleContent` attribute of our sample `./samples/CustomTemplatedElement.html`
+e.g. paragraph tags, list tags etc etc. If you try and add HTML content to the `articleContent` attribute of our sample `./samples/CustomTemplatedElement.html`
 you'll see that those tags are escaped.
 As explained in the `Container` documentation, it's to be used as a base class for widgets which contain other widgets. However it's also useful for our
 intentions where we want to add arbitrary HTML for the `articleContent`.
