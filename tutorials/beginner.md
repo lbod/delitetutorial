@@ -206,14 +206,6 @@ in the `define` the `requirejs-dplugins/css!` plugin to load our css i.e. `"requ
 This plugin is obviously used to load CSS for our custom element. There's nothing much to say here apart from this is how you individually style
 your components and [TODO] also at build time i.e. compiling `less` files, you won't load these files individually.
 
-
-## Lifecycle methods for our simple widget (expand on later when using template or do this here?)
-Explain the main lifecycle methods
-```js
-this.preCreate();
-this.render();
-this.postCreate();
-```
 ##Templates
 What we've done so far is obviously a very rudimentary demonstration. We wouldn't expect to programmatically create DOM nodes & this is where
 delite comes into it's own. Out of the box, delite supports templates using an in built implementation of [Handlebars](http://handlebarsjs.com/).
