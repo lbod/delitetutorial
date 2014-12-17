@@ -135,7 +135,7 @@ require(["delite/register", "custom/CustomElement"], function (register, CustomE
 });
 ```
 
-Note that programmatically created widgets should always call `startup()`. A helper function is provided for `delite/Widget` to place it
+Note that programmatically created widgets should always call `startup()`. A helper function is provided by `delite/Widget` to place it
 somewhere in the DOM named `placeAt`
 (see the [documentation](https://github.com/ibm-js/delite/blob/master/docs/Widget.md#placement) for it's usage).
 We need to also require the module for the custom element i.e. `"custom/CustomElement"` because we need to create a new instance and then call it's methods.
@@ -145,7 +145,6 @@ The above would render: (default image width 460x242)
 
 <img src='./images/programmatic_custom_element.gif'/>
 
-**TODO: then go on to explain what prototyping `"delite/Widget"` does i.e. lifecycle methods**
 
 ###A look at the widget lifecycle methods for our simple widget
 If we look at `"custom/CustomElement"` we can see two methods have been created for us, `render` and `refreshRendering`.
@@ -204,7 +203,7 @@ If we look at the `./CustomeElement.js` custom element module, we see there's a 
 This adds a class name to the root node of our custom element (which you can see in the DOM using your debugger tools). Also notice we include
 in the `define` the `requirejs-dplugins/css!` plugin to load our css i.e. `"requirejs-dplugins/css!./CustomElement/css/CustomElement.css"`.
 This plugin is obviously used to load CSS for our custom element. There's nothing much to say here apart from this is how you individually style
-your components and [TODO] also at build time i.e. compiling `less` files, you won't load these files individually.
+your components and **[TODO] also at build time i.e. compiling `less` files, you won't load these files individually**.
 
 ##Templates
 What we've done so far is obviously a very rudimentary demonstration. We wouldn't expect to programmatically create DOM nodes & this is where
@@ -426,7 +425,7 @@ If you refresh your page now you should see something like the following:
 
 <img src='./images/custom_templated_containernode.gif'/>
 
-TODO: recapture image, looks bad
+**TODO: recapture image, looks bad**
 
 You can see that the `attach-point="containerNode"` reference we created will render our declarative content wherever we've placed it in the template.
 If you open up your developer tools and in the console enter:
@@ -465,12 +464,6 @@ require(["delite/register", "blogging-package/BlogPost"], function (register, Bl
 
 and refresh the page, you can see how to add HTML to the `containerNode` of our widget.
 
-TODO: GOT TO HERE
-
-
-
-## topics
-custom element
-registering
-templating (handlebars simple)
-
+## Round up
+As you've seen, the basics of delite are very easy when building a custom element, keeping in mind we've not really touched on many other capabilities of the project.
+We'll expand on this in a later tutorial.
