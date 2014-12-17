@@ -437,6 +437,34 @@ document.getElementById('element').containerNode.innerHTML = "<i>And now we've r
 
 You'll see that our widget containerNode `innerHTML` is updated to what we've added.
 
+
+####Programmatic creation with containerNode
+Based on the first example (the `CustomElement` example), this should be straightforward to you now. If you wanted to programmatically create a widget, if
+you update the `./samples/BlogPost.html` from:
+
+```js
+require(["delite/register", "blogging-package/BlogPost"], function (register) {
+    register.parse();
+});
+```
+
+to:
+
+```js
+require(["delite/register", "blogging-package/BlogPost"], function (register, BlogPost) {
+    register.parse();
+    var anotherCustomElement = new BlogPost({value : 'The day after', publishDate : 'Nov 28th 2014', author : "My good self"});
+    // note you must call startup() for programmatically created widgets
+    anotherCustomElement.placeAt(document.body, 'last');
+    var containerNodeContent = "<b>boooooo</b> it's the day after, back to work soon :(" +
+            "<pre># time to start thinking about code again</pre>";
+    anotherCustomElement.containerNode.innerHTML = containerNodeContent;
+    anotherCustomElement.startup();
+});
+```
+
+and refresh the page, you can see how to add HTML to the `containerNode` of our widget.
+
 TODO: GOT TO HERE
 
 
