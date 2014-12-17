@@ -259,7 +259,7 @@ If we look at the template we just created `./BlogPost/BlogPost.html` we can see
 All templates must be enclosed in a `<template>` element, we can see all the work we did in the `render` lifecycle method becomes much
 more simple because now we're just dealing with HTML.
 
-We don't need to implement the code in `render` of the non-templated example e.g. See our `./BlogPost.js` widget module in the previous example.
+We don't need to implement the code in the `render` lifecycle method of the non-templated example e.g. See the `./CustomElement.js` widget module in the previous example.
 Instead we have:
 
 ```js
