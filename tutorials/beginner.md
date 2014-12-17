@@ -223,22 +223,23 @@ Note there are some limitations using the `delite/handlebars!` plugin in delite 
 however in many cases this isn't a limiting factor. Support for this will be explained in a later more advanced tutorial when we discuss
 [Liaison](https://github.com/ibm-js/liaison). The handlebars template implementation delite uses is primarily focused on performance.
 
+What we've done so far isn't very exciting, so lets try and do something more 'real life', for example a blogging widget.
+
 We'll create a new delite custom element using Yeoman again.
 
-Create a new directory somewhere (named `custom-templated`, which will also be our package name) and change directory to it using the command :
+Create a new directory somewhere (named `blogging-package`) and change directory to it using the command :
 
-    mkdir -p custom-templated
-    cd custom-templated
+    mkdir -p blogging-package
+    cd blogging-package
 
 Run Yeoman again to create our scaffold
 
     yo delite-element
 
-You'll be prompted to enter the widget package name & the name of the custom widget element, accept the defaults for delite widget element package
-& delite widget element name, select Yes for the template option and no for the rest.
+You'll again be prompted to enter the widget package name & the name of the custom widget element, set all the values as shown below:
 
-    ? What is the name of your delite widget element package? (custom-templated)
-    ? What do you want to call your delite widget element (must contain a dash)? (custom-templated-element)
+    ? What is the name of your delite widget element package? (blogging-package)
+    ? What do you want to call your delite widget element (must contain a dash)? (blog-post)
     ? Would you like your delite element to be built on a template? Y
     ? Would you like your delite element to providing theming capabilities? N
     ? Will your delite element require string internationalization? N
@@ -248,14 +249,14 @@ You'll be prompted to enter the widget package name & the name of the custom wid
 
 This, as shown in the console output, creates:
 
-- `./CustomTemplatedElement.js` - this is our widget module
-- `./CustomTemplatedElement/css/CustomTemplatedElement.css` - this is our widget css
-- `./CustomTemplatedElement/CustomTemplatedElement.html` - this is our widget template
-- `./samples/CustomTemplatedElement.html` - this is a sample how to use our new widget
+- `./BlogPost.js` - this is our widget module
+- `./BlogPost/css/BlogPost.css` - this is our widget css
+- `./BlogPost/BlogPost.html` - this is our widget template
+- `./samples/BlogPost.html` - this is a sample how to use our new widget
 
 
 ###Handlebars
-If we look at the template we just created `./CustomTemplatedElement/CustomTemplatedElement.html` we can see it's created the following:
+If we look at the template we just created `./BlogPost/BlogPost.html` we can see it's created the following:
 
 ```html
 <template>
@@ -267,7 +268,7 @@ If we look at the template we just created `./CustomTemplatedElement/CustomTempl
 All templates must be enclosed in a `<template>` element, we can see all the work we did in the `render` lifecycle method becomes much
 more simple because now we're just dealing with HTML.
 
-We don't need to implement the code in `render` of the non-templated example e.g. See our `./CustomElement.js` widget module in the previous example.
+We don't need to implement the code in `render` of the non-templated example e.g. See our `./BlogPost.js` widget module in the previous example.
 Instead we have:
 
 ```js
@@ -275,11 +276,11 @@ Instead we have:
 define([
 	"delite/register",
 	"delite/Widget",
-	"delite/handlebars!./CustomTemplatedElement/CustomTemplatedElement.html",
-    "requirejs-dplugins/css!./CustomTemplatedElement/css/CustomTemplatedElement.css"
+	"delite/handlebars!./BlogPost/BlogPost.html",
+    "requirejs-dplugins/css!./BlogPost/css/BlogPost.css"
 ], function (register, Widget, template) {
-	return register("custom-templated-element", [HTMLElement, Widget], {
-		baseClass: "custom-templated-element",
+	return register("blog-post", [HTMLElement, Widget], {
+		baseClass: "blog-post",
 		value: "",
 		template: template
 	});
@@ -288,17 +289,16 @@ define([
 ```
 
 We just need to include the template using the handlebars plugin i.e.
-`"delite/handlebars!./CustomTemplatedElement/CustomTemplatedElement.html"` and assign the resolved template to the `template` property of our widget i.e. `template: template`.
+`"delite/handlebars!./BlogPost/BlogPost.html"` and assign the resolved template to the `template` property of our widget i.e. `template: template`.
 
 ####Using handlebars templates
-What we've done so far isn't very exciting, so lets try and do something more 'real life'. Imagine we need to implement blogging widgets.
-The widget needs to show the blog title (which we've already done with `{{value}}`, a date it was published, the author and the content of the
-blog.
+Imagining we need to implement this blogging widget, the widget needs to show the blog title (which we've already done with `{{value}}`, a date it was
+published, the author and the content of the blog.
 
 Let's make some changes:
 #####Template
 Change our template to add new properties for a blog author, when the blog was published and the text of the blog
-in `./CustomTemplatedElement/CustomTemplatedElement.html`:
+in `./BlogPost/BlogPost.html`:
 ```html
 <template>
     <article>
@@ -315,11 +315,11 @@ So we've added some new properties, which you see is very easy to do, all we nee
 define([
 	"delite/register",
 	"delite/Widget",
-	"delite/handlebars!./CustomTemplatedElement/CustomTemplatedElement.html",
-    "requirejs-dplugins/css!./CustomTemplatedElement/css/CustomTemplatedElement.css"
+	"delite/handlebars!./BlogPost/BlogPost.html",
+    "requirejs-dplugins/css!./BlogPost/css/BlogPost.css"
 ], function (register, Widget, template) {
-	return register("custom-templated-element", [HTMLElement, Widget], {
-		baseClass: "custom-templated-element",
+	return register("blog-post", [HTMLElement, Widget], {
+		baseClass: "blog-post",
 		value: "",
 		publishDate: new Date().toString(),
 		author: "",
@@ -330,30 +330,30 @@ define([
 
 ```
 
-Note that I've added a default value for `publishDate`, just in case setting a date was optional.
+Note that I've added a default value for `publishDate`, just in case setting a date was optional & it'll just default to today's date.
 
 #####Sample usage
-So now if you change the content of `./samples/CustomTemplatedElement.html` to the following:
+So now if you change the body content of `./samples/BlogPost.html` to the following:
 
 ```html
-<custom-templated-element id="element" value="A very lazy day" publishDate="Nov 27th 2014" author="My good self" articleContent="Not doing much today because I've ate too much turkey."></custom-templated-element>
+<blog-post id="element" value="A very lazy day" publishDate="Nov 27th 2014" author="My good self" articleContent="Not doing much today because I've ate too much turkey."></blog-post>
 <button onclick="element.value='Now sleeping!'; event.target.disabled=true">click to change title</button>
 ```
 
-And updating the template CSS `./CustomTemplatedElement/css/CustomTemplatedElement.css` to make it slightly more interesting to:
+And updating the template CSS `./BlogPost/css/BlogPost.css` to make it slightly more interesting to:
 
 ```css
 /* style for the custom element itself */
-.custom-templated-element {
+.blog-post {
     display: block;
 }
-.custom-templated-element h3 {
+.blog-post h3 {
     color: red;
 }
-.custom-templated-element p.blogdetails span {
+.blog-post p.blogdetails span {
     font-weight: bold;
 }
-.custom-templated-element div.blog {
+.blog-post div.blog {
     padding-left: 20px;
 }
 ```
@@ -362,12 +362,12 @@ If you refresh the page you'll see it's becoming something more you'd envisage a
 
 ####delite/Container and containerNode
 Now is a good time to discuss the functionality provided by [delite/Container](https://github.com/ibm-js/delite/blob/master/docs/Container.md).
-Looking at the widget we've already created, the `articleContent` property of our widget might be seen as something which could be used to add arbitrary HTML
-e.g. paragraph tags, list tags etc etc. If you try and add HTML content to the `articleContent` attribute of our sample `./samples/CustomTemplatedElement.html`
+Looking at the widget we created, the `articleContent` property of our widget could be seen as a property which might be used to add arbitrary HTML
+e.g. paragraph tags, list tags etc etc. If you try and add HTML content to the `articleContent` attribute of our sample `./samples/BlogPost.html`
 you'll see that any HTML tags added in the attribute value are escaped and not rendered as HTML; this is expected. Try it out e.g.
 
 ```html
-<custom-templated-element id="element" value="A very lazy day" publishDate="Nov 27th 2014" author="My good self" articleContent="<b>my HTML tags are escaped</b>"></custom-templated-element>
+<blog-post id="element" value="A very lazy day" publishDate="Nov 27th 2014" author="My good self" articleContent="<b>my HTML tags are escaped</b>"></blog-post>
 <button onclick="element.value='Now sleeping!'; event.target.disabled=true">click to change title</button>
 ```
 
@@ -382,11 +382,11 @@ define([
 	"delite/register",
 	"delite/Widget",
 	"delite/Container",
-	"delite/handlebars!./CustomTemplatedElement/CustomTemplatedElement.html",
-    "requirejs-dplugins/css!./CustomTemplatedElement/css/CustomTemplatedElement.css"
+	"delite/handlebars!./BlogPost/BlogPost.html",
+    "requirejs-dplugins/css!./BlogPost/css/BlogPost.css"
 ], function (register, Widget, Container, template) {
-	return register("custom-templated-element", [HTMLElement, Widget, Container], {
-		baseClass: "custom-templated-element",
+	return register("blog-post", [HTMLElement, Widget, Container], {
+		baseClass: "blog-post",
 		value: "",
 		publishDate: new Date().toString(),
 		author: "",
@@ -396,10 +396,10 @@ define([
 
 ```
 
-We've extended our widget using `delite/Container` (also removing the `articleContent` property which we don't need anymore).
+We've extended our widget using `delite/Container` (and removed the `articleContent` property which we don't need anymore).
 
 #####Widget template
-Update ./CustomTemplatedElement/CustomTemplatedElement.html` to the following:
+Update ./BlogPost/BlogPost.html` to the following:
 
 ```html
 <template>
@@ -415,10 +415,10 @@ Notice the `attach-point="containerNode"` attribute. This is a special 'pointer'
 `delite/Container`, it adds a property to our widget named `containerNode` and this maps to any HTML (or widgets) as children of our widget.
 
 #####Sample usage
-Change the content of `./samples/CustomTemplatedElement.html` to the following:
+Change the body content of `./samples/BlogPost.html` to the following:
 
 ```html
-<custom-templated-element id="element" value="A very lazy day" publishDate="Nov 27th 2014" author="My good self">
+<blog-post id="element" value="A very lazy day" publishDate="Nov 27th 2014" author="My good self">
     <h4>So I ate too much</h4>
     <ol>
         <li>Turkey</li>
@@ -426,7 +426,7 @@ Change the content of `./samples/CustomTemplatedElement.html` to the following:
         <li>Roast potatoes</li>
         <li>etc etc</li>
     </ol>
-</custom-templated-element>
+</blog-post>
 <button onclick="element.value='Now sleeping!'; event.target.disabled=true">click to change title</button>
 ```
 
