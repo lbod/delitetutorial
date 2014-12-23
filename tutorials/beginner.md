@@ -28,21 +28,20 @@ Install the `generator-delite-element` globally
 
     npm install -g generator-delite-element
 
-And create a new directory (named `custom`, which will also be our package name) and change directory to it using the command :
+And create a new directory (named `title-package`, which will also be our package name) and change directory to it using the command :
 
-    mkdir -p custom
-    cd custom
+    mkdir -p title-package
+    cd title-package
 
 Run Yeoman to create our scaffold
 
     yo delite-element
 
-You'll be prompted to enter the widget package name & the name of the custom widget element, accept the defaults for delite widget element package
-& delite widget element name, select no for the rest of the options.
+You'll be prompted to enter the widget package name & the name of the custom widget element, enter the following choices shown in brackets below.
 
-    ? What is the name of your delite widget element package? (custom)
-    ? What do you want to call your delite widget element (must contain a dash)? (custom-element)
-    ? Would you like your delite element to be built on a template? n
+    ? What is the name of your delite widget element package? (title-package)
+    ? What do you want to call your delite widget element (must contain a dash)? (title-widget)
+    ? Would you like your delite element to be built on a template? (n)
     ? Would you like your delite element to providing theming capabilities? n
     ? Will your delite element require string internationalization? n
     ? Will your delite element require pointer management? n
@@ -53,16 +52,16 @@ Lets look through what Yeoman created, again this is just a boilerplate setup bu
 
 We've created a new package named `custom` for new widgets that we'll create.
 
-- `./CustomElement.js` - this is our widget module
-- `./CustomElement/css/CustomElement.css` - this is our widget css
-- `./samples/CustomElement.html` - this is a sample how to use our new widget
+- `./TitleWidget.js` - this is our widget module
+- `./TitleWidget/css/TitleWidget.css` - this is our widget css
+- `./samples/TitleWidget.html` - this is a sample how to use our new widget
 
-This is the most basic setup for a widget/custom component, you can view the sample generated HTML `./samples/CustomElement.html`
+This is the most basic setup for a widget/custom component, you can view the sample generated HTML `./samples/TitleWidget.html`
 in a browser to see what's been created.
 We'll build upon this example HTML as we progress in the tutorial.
 
-Note that we just accepted the default names the `yo` generator created for us. In case there's any confusion, the module name created `CustomElement` bears
-no relation to the custom element name i.e. `custom-element`.
+Note that we just accepted the default names the `yo` generator created for us. In case there's any confusion, the module name created `TitleWidget` bears
+no relation to the custom element name i.e. `title-widget`, the module `TitleWidget` registers the custom element tag name `title-widget`.
 
     blurb about using dcl here? i.e. using requirejs we include dcl and delite/register which allows us to create a class
     via a module. It needs to be explained briefly but hint that you could do it inline in the page, not using a module.
@@ -70,22 +69,22 @@ no relation to the custom element name i.e. `custom-element`.
 ---
 
 ## Creating a custom element
-Viewing the `./samples/CustomElement.html` example HTML we can see we've (partly) created the custom element declaratively in markup via
+Viewing the `./samples/TitleWidget.html` example HTML we can see we've (partly) created the custom element declaratively in markup via
 ```html
-<custom-element id="element" value="The Title"></custom-element>
+<title-widget id="element" value="The Title"></title-widget>
 ```
 For those who used the Dojo Toolkit Dijit framework previously, an important conceptual difference in delite is that the widget is the DOM node.
 Dijit widgets instead, had a property which referenced the DOM node.
 
 ###Registering
 
-The `<custom-element>` element doesn't constitute a custom element on it's own, it first needs to go through a registration process which is achieved using
+The `<title-widget>` element doesn't constitute a custom element on it's own, it first needs to go through a registration process which is achieved using
 the `delite/register` module. This is analogous to the HTML specification for registering custom elements
-i.e. `document.registerElement('custom-element');`
+i.e. `document.registerElement('title-widget');`
 
-If we look at the custom element module `./CustomElement.js` we see we register the custom element tag via:
+If we look at the custom element module `./TitleWidget.js` we see we register the custom element tag via:
 ```js
-return register("custom-element", [HTMLElement, Widget], { .....
+return register("title-widget", [HTMLElement, Widget], { .....
 ```
 
 This is an important concept which sometimes isn't clear at a first glance. You can add any non-standard tag to an HTML page and the browser HTML parser
@@ -94,7 +93,7 @@ will not complain, this is because these elements will be defined as a native
 To create a custom element it must be **upgraded** first, this is what `delite/register` does. `delite/register` supports browsers who natively
 support `document.registerElement` and those who don't.
 
-The registration process above using `delite/register`, creates a custom element by registering the tag name `"custom-element"` as the first
+The registration process above using `delite/register`, creates a custom element by registering the tag name `"title-widget"` as the first
 argument and then inheriting (prototyping) the `HTMLElement` native element (as well as the `"delite/Widget"` module).
 
 Elements which inherit from `HTMLElement`
@@ -102,10 +101,10 @@ using [valid custom element names](http://www.w3.org/TR/2013/WD-custom-elements-
 The most basic requirement for the tag name is it **MUST** contain a dash **(-)**.
 
 ###Declarative creation of custom elements
-If we view the generated sample HTML `./samples/CustomElement.html`, we see the following code:
+If we view the generated sample HTML `./samples/TitleWidget.html`, we see the following code:
 
 ```js
-require(["delite/register", "custom/CustomElement"], function (register) {
+require(["delite/register", "title-package/TitleWidget"], function (register) {
     register.parse();
 });
 ```
@@ -113,32 +112,32 @@ require(["delite/register", "custom/CustomElement"], function (register) {
 Declarative widgets (those created via markup in the page) need to be parsed in order to kick off the lifecycle of creating the widget.
 
 ###Programmatic creation of custom elements
-The generated example in `./samples/CustomElement.html` shows the declarative creation of custom elements, you can do the same thing
+The generated example in `./samples/TitleWidget.html` shows the declarative creation of custom elements, you can do the same thing
 with programmatic creation
 
-edit `./samples/CustomElement.html` i.e.
+edit `./samples/TitleWidget.html` i.e.
 
 ```js
-require(["delite/register", "custom/CustomElement"], function (register) {
+require(["delite/register", "title-package/TitleWidget"], function (register) {
     register.parse();
 });
 ```
 
 to the following:
 ```js
-require(["delite/register", "custom/CustomElement"], function (register, CustomElement) {
+require(["delite/register", "title-package/TitleWidget"], function (register, TitleWidget) {
     register.parse();
-    var anotherCustomElement = new CustomElement({value : 'another custom element title'});
+    var anotherTitleWidget = new TitleWidget({value : 'another custom element title'});
     // note you must call startup() for programmatically created widgets
-    anotherCustomElement.placeAt(document.body, 'last');
-    anotherCustomElement.startup();
+    anotherTitleWidget.placeAt(document.body, 'last');
+    anotherTitleWidget.startup();
 });
 ```
 
 Note that programmatically created widgets should always call `startup()`. A helper function is provided by `delite/Widget` to place it
 somewhere in the DOM named `placeAt`
 (see the [documentation](https://github.com/ibm-js/delite/blob/master/docs/Widget.md#placement) for it's usage).
-We need to also require the module for the custom element i.e. `"custom/CustomElement"` because we need to create a new instance and then call it's methods.
+We need to also require the module for the custom element i.e. `"title-package/TitleWidget"` because we need to create a new instance and then call it's methods.
 
 
 The above would render: (default image width 460x242)
@@ -147,7 +146,7 @@ The above would render: (default image width 460x242)
 
 
 ###A look at the widget lifecycle methods for our simple widget
-If we look at `"custom/CustomElement"` we can see two methods have been created for us, `render` and `refreshRendering`.
+If we look at `"title-package/TitleWidget"` we can see two methods have been created for us, `render` and `refreshRendering`.
 `render` is the most simplest of [lifecycle](https://github.com/ibm-js/delite/blob/master/docs/Widget.md#lifecycle)
 methods we need to create our widget.
 
@@ -165,7 +164,18 @@ It's primary concern is to observe changes to properties defined on the widget a
 you place a breakpoint in that method and then click the "click to change title" button, you'll see this method is called
 (because the button adds inline JavaScript to update the element's value property).
 
-If we wanted to see what the old value was (and also print it out to the DOM) we can change this method to the following:
+If we wanted to see what the old value was (and also print it out to the DOM) we can change this method from
+
+```js
+refreshRendering: function (props) {
+    // if the value change update the display
+    if ("value" in props) {
+        this._h.innerHTML = this.value;
+    }
+}
+```
+
+to the following:
 
 ```js
 refreshRendering: function (props) {
@@ -188,7 +198,7 @@ Click the 'click to change title button' which will render like:
 If you still have a breakpoint set in `refreshRendering` you will see again that the `value` property of our widget is again contained in the `props`
 argument.
 
-Also, if you update the value `property` of `./CustomeElement.js` to:
+Also, if you update the value `property` of `./TitleWidget.js` to:
 
 ```js
 value: "The Title",
@@ -199,9 +209,9 @@ The [decor/Invalidating](https://github.com/ibm-js/decor/blob/master/docs/Invali
 
 ###CSS
 
-If we look at the `./CustomeElement.js` custom element module, we see there's a property defined named `baseClass` i.e. `baseClass: "custom-element"`.
+If we look at the `./TitleWidget.js` custom element module, we see there's a property defined named `baseClass` i.e. `baseClass: "title-widget"`.
 This adds a class name to the root node of our custom element (which you can see in the DOM using your debugger tools). Also notice we include
-in the `define` the `requirejs-dplugins/css!` plugin to load our css i.e. `"requirejs-dplugins/css!./CustomElement/css/CustomElement.css"`.
+in the `define` the `requirejs-dplugins/css!` plugin to load our css i.e. `"requirejs-dplugins/css!./TitleWidget/css/TitleWidget.css"`.
 This plugin is obviously used to load CSS for our custom element. There's nothing much to say here apart from this is how you individually style
 your components and **[TODO] also at build time i.e. compiling `less` files, you won't load these files individually**.
 
@@ -259,7 +269,7 @@ If we look at the template we just created `./BlogPost/BlogPost.html` we can see
 All templates must be enclosed in a `<template>` element, we can see all the work we did in the `render` lifecycle method becomes much
 more simple because now we're just dealing with HTML.
 
-We don't need to implement the code in the `render` lifecycle method of the non-templated example e.g. See the `./CustomElement.js` widget module in the previous example.
+We don't need to implement the code in the `render` lifecycle method of the non-templated example e.g. See the `./TitleWidget.js` widget module in the previous example.
 Instead we have:
 
 ```js
@@ -438,7 +448,7 @@ You'll see that our widget containerNode `innerHTML` is updated to what we've ad
 
 
 ####Programmatic creation with containerNode
-Based on the first example (the `CustomElement` example), this should be straightforward to you now. If you wanted to programmatically create a widget, if
+Based on the first example (the `TitleWidget` example), this should be straightforward to you now. If you wanted to programmatically create a widget, if
 you update the `./samples/BlogPost.html` from:
 
 ```js
